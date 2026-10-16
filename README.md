@@ -60,27 +60,13 @@ A small, self-hosted planner for a shared home: the chores, the grocery list, an
 
 Built with ASP.NET Core and PostgreSQL for the API, and Blazor WebAssembly with [MudBlazor](https://mudblazor.com) for the app.
 
-## Self-hosting with Docker Compose
+## Self-hosting
 
-You need a machine with Docker and Docker Compose.
+Hearth runs as three containers: Postgres, the API and the app. The images are on GitHub's registry, so all you need is [`docker-compose.yml`](docker-compose.yml) and your settings. Start it with Docker Compose or add it to Portainer as a stack, whichever you prefer.
 
-**1. Get the code**
+### Settings
 
-```bash
-git clone https://github.com/jordivandijk/hearth.git
-```
-
-```bash
-cd hearth
-```
-
-**2. Fill in the settings**
-
-```bash
-cp example.env .env
-```
-
-Then edit `.env`:
+Both ways use the same settings. [`example.env`](example.env) has them all:
 
 | Setting | What it's for |
 |---|---|
@@ -90,71 +76,40 @@ Then edit `.env`:
 | `ADMIN_SEED_PASSWORD` | Its password. Change it after signing in. Without one, no admin is made and nobody can sign in; the API log says so. |
 | `HOUSEHOLD_NAME` | The household's name. Default `Home`. |
 | `WEB_URL` | The address people open the app on, without a trailing slash. |
-| `API_URL` | Where the app finds the API. Leave it empty when both are on one domain (step 4). |
+| `API_URL` | Where the app finds the API. Leave it empty when both are on one domain (see [Put it on your domain](#put-it-on-your-domain)). |
 
 The admin account and household are only created while there is no admin yet. Changing these later doesn't change an existing account.
 
-**3. Start it**
+### With Docker Compose
 
-Save this as `docker-compose.yml`:
+You need a machine with Docker and Docker Compose. In a new folder, download the compose file and the example settings:
 
-```yaml
-services:
-
-  postgres:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_DB: hearth
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
-  api:
-    build: ./HouseholdPlanner.Api
-    environment:
-      ConnectionStrings__DefaultConnection: "Host=postgres;Database=hearth;Username=postgres;Password=${POSTGRES_PASSWORD}"
-      Jwt__Key: ${JWT_KEY}
-      CorsOrigins: ${WEB_URL}
-      AdminSeed__Username: ${ADMIN_SEED_USERNAME:-admin}
-      AdminSeed__Password: ${ADMIN_SEED_PASSWORD}
-      AdminSeed__HouseholdName: ${HOUSEHOLD_NAME:-Home}
-    ports:
-      - "127.0.0.1:5160:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: unless-stopped
-
-  web:
-    build: ./HouseholdPlanner.Web
-    environment:
-      API_URL: ${API_URL:-}
-    ports:
-      - "127.0.0.1:5224:80"
-    depends_on:
-      - api
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
+```bash
+curl -O https://raw.githubusercontent.com/jordivandijk/hearth-household-planner/main/docker-compose.yml
 ```
 
 ```bash
-docker compose up -d --build
+curl -o .env https://raw.githubusercontent.com/jordivandijk/hearth-household-planner/main/example.env
 ```
+
+Fill in `.env`, then start it:
+
+```bash
+docker compose up -d
+```
+
+### With Portainer
+
+1. Go to **Stacks → Add stack** and name it, for example `hearth`.
+2. Choose **Web editor** and paste in [`docker-compose.yml`](docker-compose.yml). Or choose **Repository** with `https://github.com/jordivandijk/hearth-household-planner` and compose path `docker-compose.yml`, so the stack picks up changes to the file.
+3. Under **Environment variables**, add the settings. **Load variables from .env file** takes a filled-in copy of [`example.env`](example.env).
+4. Choose **Deploy the stack**.
 
 The API creates and updates its database tables on startup.
 
-**4. Put it on your domain**
+### Put it on your domain
 
-The ports above only listen on the machine itself, for a reverse proxy in front. One domain is enough: the API's addresses all start with `/api/`. With [Caddy](https://caddyserver.com), which also takes care of HTTPS:
+The app listens on port 5224 and the API on 5160. One domain is enough for a reverse proxy in front, because the API's addresses all start with `/api/`. With [Caddy](https://caddyserver.com), which also takes care of HTTPS:
 
 ```caddyfile
 hearth.example.com {
@@ -167,12 +122,12 @@ hearth.example.com {
 }
 ```
 
-Then `WEB_URL` is `https://hearth.example.com` and `API_URL` stays empty.
+Then `WEB_URL` is `https://hearth.example.com` and `API_URL` stays empty. When the proxy runs on the same machine, you can change the ports to `"127.0.0.1:5160:8080"` and `"127.0.0.1:5224:80"`, so they can only be reached through it.
 
 <details>
 <summary>Without a reverse proxy, on your home network</summary>
 
-Change the ports to `"5160:8080"` and `"5224:80"`, so other devices can reach them. Then set:
+Set:
 
 - `API_URL` to `http://<server-ip>:5160`
 - `WEB_URL` to `http://<server-ip>:5224`
@@ -181,33 +136,39 @@ Open `http://<server-ip>:5224`. Without HTTPS, passwords travel unencrypted and 
 
 </details>
 
-**5. Sign in**
+### Sign in
 
 Open the app and sign in with the admin account. To invite others, send them the code on the **Household** tab. They choose **Create an account** on the sign-in page and enter it there.
 
 ### Updating
 
+Every change to `main` builds new images, tagged `stable`. With Docker Compose, from the folder with `docker-compose.yml`:
+
 ```bash
-git pull
+docker compose pull
 ```
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
+
+In Portainer, open the stack and choose **Update the stack** with **Re-pull image and redeploy** switched on.
 
 ### Backups
 
-Everything is in the Postgres database. To make a dump:
+Everything is in the Postgres database. To make a dump, from the folder with `docker-compose.yml`:
 
 ```bash
-docker compose exec -T postgres pg_dump -U postgres -Fc hearth > hearth-$(date +%F).dump
+docker compose exec -T postgres pg_dump -U postgres -Fc household > hearth-$(date +%F).dump
 ```
 
 To restore one:
 
 ```bash
-docker compose exec -T postgres pg_restore -U postgres -d hearth --clean --if-exists < hearth-2026-10-15.dump
+docker compose exec -T postgres pg_restore -U postgres -d household --clean --if-exists < hearth-2026-10-15.dump
 ```
+
+With Portainer, use `docker exec -i hearth-postgres-1` (your stack's name, then `-postgres-1`) in place of `docker compose exec -T postgres`.
 
 ## Automations
 
@@ -280,6 +241,12 @@ In an **HTTP Request** node, set **Authentication** to **Generic Credential Type
 ## Development
 
 You need the .NET 10 SDK, and Docker for a local database.
+
+Get the code:
+
+```bash
+git clone https://github.com/jordivandijk/hearth-household-planner.git
+```
 
 Start a database:
 

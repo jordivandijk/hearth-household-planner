@@ -17,10 +17,7 @@ services:
 
 
   household-api:
-    image: ghcr.io/jordivandijk/household-planner-api:stable:${TAG:-stable}
-    build:
-      context: ./HouseholdPlanner.Api
-      dockerfile: Dockerfile
+    image: ghcr.io/jordivandijk/household-planner-api:${TAG:-stable}
     ports:
       - "5160:8080"
     environment:
@@ -52,9 +49,6 @@ services:
 
   household-web:
     image: ghcr.io/jordivandijk/household-planner-web:${TAG:-stable}
-    build:
-      context: ./HouseholdPlanner.Web
-      dockerfile: Dockerfile
     ports:
       - "5224:80"
 

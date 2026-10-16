@@ -1,0 +1,89 @@
+/*
+  Kept small on purpose: the look comes from the MudBlazor theme (Theme/HearthTheme.cs).
+  This only places things MudBlazor has no parameter for.
+*/
+
+/* Room under the content for the bottom bar and the + button. */
+.app-content {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom));
+}
+
+.app-nav {
+    border-top: 1px solid var(--mud-palette-lines-default);
+    backdrop-filter: blur(14px);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* The + button sits above the bottom bar, at the right edge of the app column on wide screens. */
+.app-fab {
+    position: fixed !important;
+    right: max(18px, calc(50% - 222px + 18px));
+    bottom: calc(84px + env(safe-area-inset-bottom));
+    z-index: var(--mud-zindex-appbar);
+}
+
+/* The task sheet's calendar sits on a grey panel; MudBlazor's inner paper would paint it white again. */
+.task-calendar .mud-picker-paper {
+    background: transparent;
+}
+
+/* Toasts above the bottom bar and the + button instead of over them. */
+.mud-snackbar-location-bottom-center {
+    bottom: calc(154px + env(safe-area-inset-bottom));
+}
+
+/* FocusOnNavigate moves focus to the page title for screen readers; no ring needed there. */
+h1:focus {
+    outline: none;
+}
+
+/* Shown while the app downloads, before MudBlazor runs. Blazor sets --blazor-load-percentage as files arrive. */
+.page-loader {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 16px;
+    height: 100dvh;
+    font: 700 1.5rem Quicksand, system-ui, sans-serif;
+    color: #c25237;
+}
+
+.page-loader-bar {
+    width: 160px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(194, 82, 55, .2);
+    overflow: hidden;
+}
+
+.page-loader-bar::after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: var(--blazor-load-percentage, 0%);
+    background: currentColor;
+    transition: width .2s;
+}
+
+/* On the loader itself, not on html: an html background would show below short pages once the app runs, e.g. light theme on a dark system. */
+@media (prefers-color-scheme: dark) {
+    .page-loader {
+        background: #1d1916;
+    }
+}
+
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 2000;
+    padding: 0.75rem 1.25rem;
+    background: lightyellow;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#blazor-error-ui .dismiss {
+    position: absolute;
+    right: 0.75rem;
+    cursor: pointer;
+}

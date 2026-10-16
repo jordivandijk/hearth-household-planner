@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Nav_Tasks" xml:space="preserve">
+    <value>Taken</value>
+  </data>
+  <data name="Nav_Groceries" xml:space="preserve">
+    <value>Boodschappen</value>
+  </data>
+  <data name="Nav_Household" xml:space="preserve">
+    <value>Huishouden</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="Common_Add" xml:space="preserve">
+    <value>Toevoegen</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Opslaan</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="Common_Deleted" xml:space="preserve">
+    <value>Verwijderd</value>
+  </data>
+  <data name="Common_Added" xml:space="preserve">
+    <value>{0} toegevoegd</value>
+  </data>
+  <data name="Common_Undo" xml:space="preserve">
+    <value>Herstel</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Terug</value>
+  </data>
+  <data name="Common_TryAgain" xml:space="preserve">
+    <value>Opnieuw proberen</value>
+  </data>
+  <data name="Common_PasswordHelp" xml:space="preserve">
+    <value>Minstens 6 tekens</value>
+  </data>
+  <data name="NotForYou_Title" xml:space="preserve">
+    <value>Niet voor jou</value>
+  </data>
+  <data name="NotForYou_Text" xml:space="preserve">
+    <value>Alleen de beheerder van het huishouden kan deze pagina openen.</value>
+  </data>
+  <data name="NotFound_PageTitle" xml:space="preserve">
+    <value>Niet gevonden</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Hier is niets</value>
+  </data>
+  <data name="NotFound_Text" xml:space="preserve">
+    <value>Die pagina bestaat niet.</value>
+  </data>
+  <data name="NotFound_Back" xml:space="preserve">
+    <value>Terug naar taken</value>
+  </data>
+  <data name="Error_CantReach" xml:space="preserve">
+    <value>Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.</value>
+  </data>
+  <data name="Error_Empty" xml:space="preserve">
+    <value>De server gaf een leeg antwoord.</value>
+  </data>
+  <data name="Error_Unexpected" xml:space="preserve">
+    <value>De server gaf een onverwacht antwoord. Controleer je verbinding en probeer het opnieuw.</value>
+  </data>
+  <data name="Error_SessionExpired" xml:space="preserve">
+    <value>Je sessie is verlopen. Log opnieuw in.</value>
+  </data>
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>Daar heb je geen toestemming voor.</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>Dat bestaat niet meer.</value>
+  </data>
+  <data name="Error_Server" xml:space="preserve">
+    <value>Er ging iets mis op de server. Probeer het opnieuw.</value>
+  </data>
+  <data name="Error_TooManyRequests" xml:space="preserve">
+    <value>Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.</value>
+  </data>
+  <data name="Login_PageTitle" xml:space="preserve">
+    <value>Inloggen</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Welkom thuis</value>
+  </data>
+  <data name="Login_Subtitle" xml:space="preserve">
+    <value>Log in om te zien wat er moet gebeuren.</value>
+  </data>
+  <data name="Login_Username" xml:space="preserve">
+    <value>Gebruikersnaam</value>
+  </data>
+  <data name="Login_Password" xml:space="preserve">
+    <value>Wachtwoord</value>
+  </data>
+  <data name="Login_SignIn" xml:space="preserve">
+    <value>Inloggen</value>
+  </data>
+  <data name="Login_SigningIn" xml:space="preserve">
+    <value>Bezig met inloggen…</value>
+  </data>
+  <data name="Login_Missing" xml:space="preserve">
+    <value>Vul je gebruikersnaam en wachtwoord in.</value>
+  </data>
+  <data name="Login_Invalid" xml:space="preserve">
+    <value>Onjuiste gebruikersnaam of wachtwoord.</value>
+  </data>
+  <data name="Login_HaveCode" xml:space="preserve">
+    <value>Heb je een uitnodigingscode?</value>
+  </data>
+  <data name="Login_CreateAccount" xml:space="preserve">
+    <value>Maak een account</value>
+  </data>
+  <data name="Register_Title" xml:space="preserve">
+    <value>Word lid van een huishouden</value>
+  </data>
+  <data name="Register_Subtitle" xml:space="preserve">
+    <value>Vraag iemand thuis om de uitnodigingscode. Die staat op hun tabblad Huishouden.</value>
+  </data>
+  <data name="Register_InviteCode" xml:space="preserve">
+    <value>Uitnodigingscode</value>
+  </data>
+  <data name="Register_Name" xml:space="preserve">
+    <value>Je naam</value>
+  </data>
+  <data name="Register_NameHelp" xml:space="preserve">
+    <value>Wat de anderen zien, en waarmee je inlogt</value>
+  </data>
+  <data name="Register_Create" xml:space="preserve">
+    <value>Account maken</value>
+  </data>
+  <data name="Register_Creating" xml:space="preserve">
+    <value>Account wordt gemaakt…</value>
+  </data>
+  <data name="Register_Missing" xml:space="preserve">
+    <value>Vul de uitnodigingscode in, een naam van minstens 2 tekens en een wachtwoord van minstens 6.</value>
+  </data>
+  <data name="Register_HaveAccount" xml:space="preserve">
+    <value>Heb je al een account?</value>
+  </data>
+  <data name="Tasks_Everyone" xml:space="preserve">
+    <value>Iedereen</value>
+  </data>
+  <data name="Tasks_Mine" xml:space="preserve">
+    <value>Van mij</value>
+  </data>
+  <data name="Tasks_Empty_Title" xml:space="preserve">
+    <value>Niets op de lijst</value>
+  </data>
+  <data name="Tasks_Empty_Text" xml:space="preserve">
+    <value>Tik op + om een taak toe te voegen.</value>
+  </data>
+  <data name="Tasks_Completed" xml:space="preserve">
+    <value>Afgerond</value>
+  </data>
+  <data name="Tasks_AddTask" xml:space="preserve">
+    <value>Taak toevoegen</value>
+  </data>
+  <data name="Tasks_AllCaughtUp" xml:space="preserve">
+    <value>Alles gedaan voor vandaag</value>
+  </data>
+  <data name="Tasks_DueToday" xml:space="preserve">
+    <value>{0} voor vandaag</value>
+  </data>
+  <data name="Tasks_NothingElseToday" xml:space="preserve">
+    <value>Niets meer voor vandaag</value>
+  </data>
+  <data name="Tasks_Overdue" xml:space="preserve">
+    <value>{0} te laat</value>
+  </data>
+  <data name="Tasks_Done" xml:space="preserve">
+    <value>‘{0}’ gedaan</value>
+  </data>
+  <data name="Tasks_DoneNext" xml:space="preserve">
+    <value>Gedaan. De volgende is {0}</value>
+  </data>
+  <data name="TaskRow_Aria" xml:space="preserve">
+    <value>Gedaan: {0}</value>
+  </data>
+  <data name="TaskRow_DoneByYou" xml:space="preserve">
+    <value>Gedaan door jou</value>
+  </data>
+  <data name="TaskRow_DoneBy" xml:space="preserve">
+    <value>Gedaan door {0}</value>
+  </data>
+  <data name="TaskRow_Someone" xml:space="preserve">
+    <value>iemand</value>
+  </data>
+  <data name="Group_Overdue" xml:space="preserve">
+    <value>Te laat</value>
+  </data>
+  <data name="Group_Today" xml:space="preserve">
+    <value>Vandaag</value>
+  </data>
+  <data name="Group_Tomorrow" xml:space="preserve">
+    <value>Morgen</value>
+  </data>
+  <data name="Group_ThisWeek" xml:space="preserve">
+    <value>Deze week</value>
+  </data>
+  <data name="Group_NextWeek" xml:space="preserve">
+    <value>Volgende week</value>
+  </data>
+  <data name="Group_Later" xml:space="preserve">
+    <value>Later</value>
+  </data>
+  <data name="Group_Someday" xml:space="preserve">
+    <value>Ooit</value>
+  </data>
+  <data name="Due_NoDate" xml:space="preserve">
+    <value>Geen datum</value>
+  </data>
+  <data name="Due_DayLate" xml:space="preserve">
+    <value>1 dag te laat</value>
+  </data>
+  <data name="Due_DaysLate" xml:space="preserve">
+    <value>{0} dagen te laat</value>
+  </data>
+  <data name="Due_Today" xml:space="preserve">
+    <value>Vandaag</value>
+  </data>
+  <data name="Due_Tomorrow" xml:space="preserve">
+    <value>Morgen</value>
+  </data>
+  <data name="Due_WordTomorrow" xml:space="preserve">
+    <value>morgen</value>
+  </data>
+  <data name="Due_WordOn" xml:space="preserve">
+    <value>op {0}</value>
+  </data>
+  <data name="Choice_ThisWeekend" xml:space="preserve">
+    <value>Dit weekend</value>
+  </data>
+  <data name="Choice_NextWeek" xml:space="preserve">
+    <value>Volgende week</value>
+  </data>
+  <data name="Choice_PickDate" xml:space="preserve">
+    <value>Kies datum</value>
+  </data>
+  <data name="Repeat_None" xml:space="preserve">
+    <value>Nooit</value>
+  </data>
+  <data name="Repeat_Daily" xml:space="preserve">
+    <value>Dagelijks</value>
+  </data>
+  <data name="Repeat_Weekly" xml:space="preserve">
+    <value>Wekelijks</value>
+  </data>
+  <data name="Repeat_Biweekly" xml:space="preserve">
+    <value>Om de week</value>
+  </data>
+  <data name="Repeat_Monthly" xml:space="preserve">
+    <value>Maandelijks</value>
+  </data>
+  <data name="Date_Short" xml:space="preserve">
+    <value>{1} {0}</value>
+  </data>
+  <data name="Date_Long" xml:space="preserve">
+    <value>{0} {2} {1}</value>
+  </data>
+  <data name="DayShort_0" xml:space="preserve">
+    <value>zo</value>
+  </data>
+  <data name="DayShort_1" xml:space="preserve">
+    <value>ma</value>
+  </data>
+  <data name="DayShort_2" xml:space="preserve">
+    <value>di</value>
+  </data>
+  <data name="DayShort_3" xml:space="preserve">
+    <value>wo</value>
+  </data>
+  <data name="DayShort_4" xml:space="preserve">
+    <value>do</value>
+  </data>
+  <data name="DayShort_5" xml:space="preserve">
+    <value>vr</value>
+  </data>
+  <data name="DayShort_6" xml:space="preserve">
+    <value>za</value>
+  </data>
+  <data name="DayLong_0" xml:space="preserve">
+    <value>zondag</value>
+  </data>
+  <data name="DayLong_1" xml:space="preserve">
+    <value>maandag</value>
+  </data>
+  <data name="DayLong_2" xml:space="preserve">
+    <value>dinsdag</value>
+  </data>
+  <data name="DayLong_3" xml:space="preserve">
+    <value>woensdag</value>
+  </data>
+  <data name="DayLong_4" xml:space="preserve">
+    <value>donderdag</value>
+  </data>
+  <data name="DayLong_5" xml:space="preserve">
+    <value>vrijdag</value>
+  </data>
+  <data name="DayLong_6" xml:space="preserve">
+    <value>zaterdag</value>
+  </data>
+  <data name="MonthShort_1" xml:space="preserve">
+    <value>jan</value>
+  </data>
+  <data name="MonthShort_2" xml:space="preserve">
+    <value>feb</value>
+  </data>
+  <data name="MonthShort_3" xml:space="preserve">
+    <value>mrt</value>
+  </data>
+  <data name="MonthShort_4" xml:space="preserve">
+    <value>apr</value>
+  </data>
+  <data name="MonthShort_5" xml:space="preserve">
+    <value>mei</value>
+  </data>
+  <data name="MonthShort_6" xml:space="preserve">
+    <value>jun</value>
+  </data>
+  <data name="MonthShort_7" xml:space="preserve">
+    <value>jul</value>
+  </data>
+  <data name="MonthShort_8" xml:space="preserve">
+    <value>aug</value>
+  </data>
+  <data name="MonthShort_9" xml:space="preserve">
+    <value>sep</value>
+  </data>
+  <data name="MonthShort_10" xml:space="preserve">
+    <value>okt</value>
+  </data>
+  <data name="MonthShort_11" xml:space="preserve">
+    <value>nov</value>
+  </data>
+  <data name="MonthShort_12" xml:space="preserve">
+    <value>dec</value>
+  </data>
+  <data name="MonthLong_1" xml:space="preserve">
+    <value>januari</value>
+  </data>
+  <data name="MonthLong_2" xml:space="preserve">
+    <value>februari</value>
+  </data>
+  <data name="MonthLong_3" xml:space="preserve">
+    <value>maart</value>
+  </data>
+  <data name="MonthLong_4" xml:space="preserve">
+    <value>april</value>
+  </data>
+  <data name="MonthLong_5" xml:space="preserve">
+    <value>mei</value>
+  </data>
+  <data name="MonthLong_6" xml:space="preserve">
+    <value>juni</value>
+  </data>
+  <data name="MonthLong_7" xml:space="preserve">
+    <value>juli</value>
+  </data>
+  <data name="MonthLong_8" xml:space="preserve">
+    <value>augustus</value>
+  </data>
+  <data name="MonthLong_9" xml:space="preserve">
+    <value>september</value>
+  </data>
+  <data name="MonthLong_10" xml:space="preserve">
+    <value>oktober</value>
+  </data>
+  <data name="MonthLong_11" xml:space="preserve">
+    <value>november</value>
+  </data>
+  <data name="MonthLong_12" xml:space="preserve">
+    <value>december</value>
+  </data>
+  <data name="TaskSheet_New" xml:space="preserve">
+    <value>Nieuwe taak</value>
+  </data>
+  <data name="TaskSheet_Edit" xml:space="preserve">
+    <value>Taak bewerken</value>
+  </data>
+  <data name="TaskSheet_Placeholder" xml:space="preserve">
+    <value>Wat moet er gebeuren?</value>
+  </data>
+  <data name="TaskSheet_Who" xml:space="preserve">
+    <value>Wie</value>
+  </data>
+  <data name="TaskSheet_Me" xml:space="preserve">
+    <value>Ik</value>
+  </data>
+  <data name="TaskSheet_Anyone" xml:space="preserve">
+    <value>Wie dan ook</value>
+  </data>
+  <data name="TaskSheet_When" xml:space="preserve">
+    <value>Wanneer</value>
+  </data>
+  <data name="TaskSheet_Repeats" xml:space="preserve">
+    <value>Herhalen</value>
+  </data>
+  <data name="Groceries_Eyebrow" xml:space="preserve">
+    <value>Gedeeld met iedereen</value>
+  </data>
+  <data name="Groceries_Shop" xml:space="preserve">
+    <value>Winkelen</value>
+  </data>
+  <data name="Groceries_DoneShopping" xml:space="preserve">
+    <value>Klaar met winkelen</value>
+  </data>
+  <data name="Groceries_QuickPlaceholder" xml:space="preserve">
+    <value>Bijv. 2 citroenen</value>
+  </data>
+  <data name="Groceries_BoughtRecently" xml:space="preserve">
+    <value>Laatst gekocht</value>
+  </data>
+  <data name="Groceries_Empty_Title" xml:space="preserve">
+    <value>De lijst is leeg</value>
+  </data>
+  <data name="Groceries_Empty_Text" xml:space="preserve">
+    <value>Voeg hierboven toe wat je nodig hebt.</value>
+  </data>
+  <data name="Groceries_InCart" xml:space="preserve">
+    <value>In het mandje</value>
+  </data>
+  <data name="Groceries_FinishTrip" xml:space="preserve">
+    <value>Afronden</value>
+  </data>
+  <data name="Groceries_Clear" xml:space="preserve">
+    <value>Leegmaken</value>
+  </data>
+  <data name="Groceries_AddItem" xml:space="preserve">
+    <value>Iets toevoegen</value>
+  </data>
+  <data name="Groceries_InTheCart" xml:space="preserve">
+    <value>{0} van {1} in het mandje</value>
+  </data>
+  <data name="Groceries_ToBuy" xml:space="preserve">
+    <value>{0} te kopen</value>
+  </data>
+  <data name="Groceries_InCartCount" xml:space="preserve">
+    <value>{0} in het mandje</value>
+  </data>
+  <data name="Groceries_Cleared_One" xml:space="preserve">
+    <value>1 artikel opgeruimd</value>
+  </data>
+  <data name="Groceries_Cleared_Other" xml:space="preserve">
+    <value>{0} artikelen opgeruimd</value>
+  </data>
+  <data name="GroceryRow_Aria" xml:space="preserve">
+    <value>In het mandje: {0}</value>
+  </data>
+  <data name="GrocerySheet_New" xml:space="preserve">
+    <value>Toevoegen aan boodschappen</value>
+  </data>
+  <data name="GrocerySheet_Edit" xml:space="preserve">
+    <value>Artikel bewerken</value>
+  </data>
+  <data name="GrocerySheet_Placeholder" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="GrocerySheet_Quantity" xml:space="preserve">
+    <value>Aantal</value>
+  </data>
+  <data name="GrocerySheet_Less" xml:space="preserve">
+    <value>Minder</value>
+  </data>
+  <data name="GrocerySheet_More" xml:space="preserve">
+    <value>Meer</value>
+  </data>
+  <data name="GrocerySheet_Aisle" xml:space="preserve">
+    <value>Afdeling</value>
+  </data>
+  <data name="Aisle_Produce" xml:space="preserve">
+    <value>Groente &amp; fruit</value>
+  </data>
+  <data name="Aisle_DairyEggs" xml:space="preserve">
+    <value>Zuivel &amp; eieren</value>
+  </data>
+  <data name="Aisle_Bakery" xml:space="preserve">
+    <value>Bakkerij</value>
+  </data>
+  <data name="Aisle_MeatFish" xml:space="preserve">
+    <value>Vlees &amp; vis</value>
+  </data>
+  <data name="Aisle_Pantry" xml:space="preserve">
+    <value>Voorraadkast</value>
+  </data>
+  <data name="Aisle_Frozen" xml:space="preserve">
+    <value>Diepvries</value>
+  </data>
+  <data name="Aisle_Household" xml:space="preserve">
+    <value>Huishouden</value>
+  </data>
+  <data name="Aisle_Other" xml:space="preserve">
+    <value>Overig</value>
+  </data>
+  <data name="Household_People_One" xml:space="preserve">
+    <value>{0} persoon</value>
+  </data>
+  <data name="Household_People_Other" xml:space="preserve">
+    <value>{0} personen</value>
+  </data>
+  <data name="Household_DoneThisWeek_One" xml:space="preserve">
+    <value>{0} taak gedaan deze week</value>
+  </data>
+  <data name="Household_DoneThisWeek_Other" xml:space="preserve">
+    <value>{0} taken gedaan deze week</value>
+  </data>
+  <data name="Household_ThisWeek" xml:space="preserve">
+    <value>Gedaan deze week</value>
+  </data>
+  <data name="Household_You" xml:space="preserve">
+    <value>{0} (jij)</value>
+  </data>
+  <data name="Household_MemberStats" xml:space="preserve">
+    <value>{0} gedaan · {1} open</value>
+  </data>
+  <data name="Household_Invite" xml:space="preserve">
+    <value>Iemand uitnodigen</value>
+  </data>
+  <data name="Household_InviteHelp" xml:space="preserve">
+    <value>Die vult deze code in bij het aanmelden.</value>
+  </data>
+  <data name="Household_Copy" xml:space="preserve">
+    <value>Kopiëren</value>
+  </data>
+  <data name="Household_Copied" xml:space="preserve">
+    <value>Gekopieerd</value>
+  </data>
+  <data name="Household_CopyFailed" xml:space="preserve">
+    <value>Kopiëren lukte niet. Selecteer de code en kopieer hem zelf.</value>
+  </data>
+  <data name="Household_Appearance" xml:space="preserve">
+    <value>Weergave</value>
+  </data>
+  <data name="Theme_System" xml:space="preserve">
+    <value>Systeem</value>
+  </data>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>Licht</value>
+  </data>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>Donker</value>
+  </data>
+  <data name="Household_Language" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="Household_Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Household_SignedInAs" xml:space="preserve">
+    <value>Ingelogd als</value>
+  </data>
+  <data name="Household_CurrentPassword" xml:space="preserve">
+    <value>Huidig wachtwoord</value>
+  </data>
+  <data name="Household_NewPassword" xml:space="preserve">
+    <value>Nieuw wachtwoord</value>
+  </data>
+  <data name="Household_ChangePassword" xml:space="preserve">
+    <value>Wachtwoord wijzigen</value>
+  </data>
+  <data name="Household_PasswordChanged" xml:space="preserve">
+    <value>Wachtwoord gewijzigd</value>
+  </data>
+  <data name="Household_ManageMembers" xml:space="preserve">
+    <value>Beheer</value>
+  </data>
+  <data name="Household_SignOut" xml:space="preserve">
+    <value>Uitloggen</value>
+  </data>
+  <data name="Admin_Eyebrow" xml:space="preserve">
+    <value>Huishouden</value>
+  </data>
+  <data name="Admin_Title" xml:space="preserve">
+    <value>Beheer</value>
+  </data>
+  <data name="Admin_Summary" xml:space="preserve">
+    <value>{0} in {1}</value>
+  </data>
+  <data name="Admin_People" xml:space="preserve">
+    <value>Personen</value>
+  </data>
+  <data name="Role_Admin" xml:space="preserve">
+    <value>Beheerder</value>
+  </data>
+  <data name="Role_Member" xml:space="preserve">
+    <value>Lid</value>
+  </data>
+  <data name="Admin_RemoveAria" xml:space="preserve">
+    <value>{0} verwijderen</value>
+  </data>
+  <data name="Admin_RemoveTitle" xml:space="preserve">
+    <value>{0} verwijderen?</value>
+  </data>
+  <data name="Admin_RemoveText" xml:space="preserve">
+    <value>Het account wordt verwijderd en uitgelogd. Taken van deze persoon zijn daarna voor wie dan ook. Dit kan niet ongedaan worden gemaakt.</value>
+  </data>
+  <data name="Admin_Remove" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="Admin_Removed" xml:space="preserve">
+    <value>{0} is verwijderd. Maak een nieuwe uitnodigingscode, zodat {0} niet opnieuw lid kan worden.</value>
+  </data>
+  <data name="Admin_InviteCode" xml:space="preserve">
+    <value>Uitnodigingscode</value>
+  </data>
+  <data name="Admin_InviteHelp" xml:space="preserve">
+    <value>Met een nieuwe code werkt de oude niet meer. Wie al lid is, blijft lid.</value>
+  </data>
+  <data name="Admin_NewCode" xml:space="preserve">
+    <value>Nieuwe code</value>
+  </data>
+  <data name="Admin_NewCodeTitle" xml:space="preserve">
+    <value>Nieuwe uitnodigingscode maken?</value>
+  </data>
+  <data name="Admin_NewCodeText" xml:space="preserve">
+    <value>De huidige code werkt dan niet meer. Wie al lid is, blijft lid.</value>
+  </data>
+  <data name="Admin_NewCodeMade" xml:space="preserve">
+    <value>Nieuwe uitnodigingscode gemaakt</value>
+  </data>
+  <data name="Admin_Week" xml:space="preserve">
+    <value>Week</value>
+  </data>
+  <data name="Admin_WeekStart" xml:space="preserve">
+    <value>Week begint op</value>
+  </data>
+  <data name="Admin_WeekStartHelp" xml:space="preserve">
+    <value>Bepaalt wat deze week en volgende week is in de takenlijst en de huishoudstatistieken, en de eerste kolom van de kalender.</value>
+  </data>
+  <data name="Admin_WeekStartSaved" xml:space="preserve">
+    <value>Weken beginnen nu op {0}</value>
+  </data>
+  <data name="Admin_ApiKeys" xml:space="preserve">
+    <value>API-sleutels</value>
+  </data>
+  <data name="Admin_ApiKeysHelp" xml:space="preserve">
+    <value>Voor automatiseringen zoals Home Assistant of n8n. Een sleutel kan alles wat jij kunt, dus bewaar hem net zo zorgvuldig als je wachtwoord.</value>
+  </data>
+  <data name="Admin_NewKey" xml:space="preserve">
+    <value>Nieuwe sleutel</value>
+  </data>
+  <data name="Admin_KeyName" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="Admin_KeyNameHelp" xml:space="preserve">
+    <value>Waar hij voor is, zoals Home Assistant</value>
+  </data>
+  <data name="Admin_CreateKey" xml:space="preserve">
+    <value>Sleutel maken</value>
+  </data>
+  <data name="Admin_KeyShownOnce" xml:space="preserve">
+    <value>Kopieer deze sleutel nu. Je kunt hem hierna niet meer zien.</value>
+  </data>
+  <data name="Admin_KeyUsage" xml:space="preserve">
+    <value>Automatiseringen sturen hem met elk verzoek mee, als deze header:</value>
+  </data>
+  <data name="Admin_KeyDone" xml:space="preserve">
+    <value>Klaar</value>
+  </data>
+  <data name="Admin_KeyCopyFailed" xml:space="preserve">
+    <value>Kopiëren lukte niet. Selecteer de sleutel en kopieer hem zelf.</value>
+  </data>
+  <data name="Admin_KeyNeverUsed" xml:space="preserve">
+    <value>Nog niet gebruikt</value>
+  </data>
+  <data name="Admin_KeyUsedToday" xml:space="preserve">
+    <value>Vandaag gebruikt</value>
+  </data>
+  <data name="Admin_KeyUsedOn" xml:space="preserve">
+    <value>Laatst gebruikt op {0}</value>
+  </data>
+  <data name="Admin_RevokeAria" xml:space="preserve">
+    <value>{0} intrekken</value>
+  </data>
+  <data name="Admin_RevokeTitle" xml:space="preserve">
+    <value>{0} intrekken?</value>
+  </data>
+  <data name="Admin_RevokeText" xml:space="preserve">
+    <value>Alles wat deze sleutel gebruikt, werkt meteen niet meer. Dit kan niet ongedaan worden gemaakt.</value>
+  </data>
+  <data name="Admin_Revoke" xml:space="preserve">
+    <value>Intrekken</value>
+  </data>
+  <data name="Admin_Revoked" xml:space="preserve">
+    <value>{0} is ingetrokken</value>
+  </data>
+</root>

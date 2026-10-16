@@ -17,7 +17,7 @@ services:
 
 
   household-api:
-    image: ghcr.io/jordivandijk/household-planner-api:stable:${TAG:-stable}
+    image: ghcr.io/jordivandijk/household-planner-api:${TAG:-stable}
     build:
       context: ./HouseholdPlanner.Api
       dockerfile: Dockerfile

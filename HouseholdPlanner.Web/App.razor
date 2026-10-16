@@ -1,0 +1,55 @@
+@implements IDisposable
+@inject ThemeState ThemeState
+@inject IStringLocalizer<Strings> T
+
+<MudThemeProvider @ref="_themeProvider" Theme="HearthTheme.Theme" IsDarkMode="ThemeState.IsDark" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @* Signed in but not allowed (a member on the admin page): the login page would just send them back. *@
+                    @if (context.User.Identity?.IsAuthenticated == true)
+                    {
+                        <EmptyState Title="@T["NotForYou_Title"]" Text="@T["NotForYou_Text"]" />
+                    }
+                    else
+                    {
+                        <RedirectToLogin />
+                    }
+                </NotAuthorized>
+                <Authorizing>
+                    <MudProgressLinear Color="Color.Primary" Indeterminate />
+                </Authorizing>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+    private MudThemeProvider _themeProvider = default!;
+
+    protected override void OnInitialized() => ThemeState.Changed += OnThemeChanged;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        await ThemeState.LoadAsync(await _themeProvider.GetSystemDarkModeAsync());
+        await _themeProvider.WatchSystemDarkModeAsync(dark =>
+        {
+            ThemeState.SetSystemIsDark(dark);
+            return Task.CompletedTask;
+        });
+    }
+
+    private void OnThemeChanged() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => ThemeState.Changed -= OnThemeChanged;
+}

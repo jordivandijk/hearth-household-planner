@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Nav_Tasks" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="Nav_Groceries" xml:space="preserve">
+    <value>Groceries</value>
+  </data>
+  <data name="Nav_Household" xml:space="preserve">
+    <value>Household</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common_Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="Common_Added" xml:space="preserve">
+    <value>Added {0}</value>
+  </data>
+  <data name="Common_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Common_TryAgain" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Common_PasswordHelp" xml:space="preserve">
+    <value>At least 6 characters</value>
+  </data>
+  <data name="NotForYou_Title" xml:space="preserve">
+    <value>Not for you</value>
+  </data>
+  <data name="NotForYou_Text" xml:space="preserve">
+    <value>Only the household's admin can open this page.</value>
+  </data>
+  <data name="NotFound_PageTitle" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Nothing here</value>
+  </data>
+  <data name="NotFound_Text" xml:space="preserve">
+    <value>That page doesn't exist.</value>
+  </data>
+  <data name="NotFound_Back" xml:space="preserve">
+    <value>Back to tasks</value>
+  </data>
+  <data name="Error_CantReach" xml:space="preserve">
+    <value>Can't reach the server. Check your connection and try again.</value>
+  </data>
+  <data name="Error_Empty" xml:space="preserve">
+    <value>The server returned an empty response.</value>
+  </data>
+  <data name="Error_Unexpected" xml:space="preserve">
+    <value>The server sent an unexpected response. Check your connection and try again.</value>
+  </data>
+  <data name="Error_SessionExpired" xml:space="preserve">
+    <value>Your session has expired. Please sign in again.</value>
+  </data>
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>You don't have permission to do that.</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>That item no longer exists.</value>
+  </data>
+  <data name="Error_Server" xml:space="preserve">
+    <value>Something went wrong on the server. Please try again.</value>
+  </data>
+  <data name="Error_TooManyRequests" xml:space="preserve">
+    <value>Too many attempts. Wait a few minutes and try again.</value>
+  </data>
+  <data name="Login_PageTitle" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Welcome home</value>
+  </data>
+  <data name="Login_Subtitle" xml:space="preserve">
+    <value>Sign in to see what needs doing.</value>
+  </data>
+  <data name="Login_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Login_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Login_SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Login_SigningIn" xml:space="preserve">
+    <value>Signing in…</value>
+  </data>
+  <data name="Login_Missing" xml:space="preserve">
+    <value>Please enter your username and password.</value>
+  </data>
+  <data name="Login_Invalid" xml:space="preserve">
+    <value>Invalid username or password.</value>
+  </data>
+  <data name="Login_HaveCode" xml:space="preserve">
+    <value>Got an invite code?</value>
+  </data>
+  <data name="Login_CreateAccount" xml:space="preserve">
+    <value>Create an account</value>
+  </data>
+  <data name="Register_Title" xml:space="preserve">
+    <value>Join a household</value>
+  </data>
+  <data name="Register_Subtitle" xml:space="preserve">
+    <value>Ask someone at home for the invite code. It's on their Household tab.</value>
+  </data>
+  <data name="Register_InviteCode" xml:space="preserve">
+    <value>Invite code</value>
+  </data>
+  <data name="Register_Name" xml:space="preserve">
+    <value>Your name</value>
+  </data>
+  <data name="Register_NameHelp" xml:space="preserve">
+    <value>What the others see, and what you sign in with</value>
+  </data>
+  <data name="Register_Create" xml:space="preserve">
+    <value>Create account</value>
+  </data>
+  <data name="Register_Creating" xml:space="preserve">
+    <value>Creating account…</value>
+  </data>
+  <data name="Register_Missing" xml:space="preserve">
+    <value>Fill in the invite code, a name of at least 2 characters and a password of at least 6.</value>
+  </data>
+  <data name="Register_HaveAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="Tasks_Everyone" xml:space="preserve">
+    <value>Everyone</value>
+  </data>
+  <data name="Tasks_Mine" xml:space="preserve">
+    <value>Mine</value>
+  </data>
+  <data name="Tasks_Empty_Title" xml:space="preserve">
+    <value>Nothing on the list</value>
+  </data>
+  <data name="Tasks_Empty_Text" xml:space="preserve">
+    <value>Tap + to add a task.</value>
+  </data>
+  <data name="Tasks_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Tasks_AddTask" xml:space="preserve">
+    <value>Add task</value>
+  </data>
+  <data name="Tasks_AllCaughtUp" xml:space="preserve">
+    <value>All caught up for today</value>
+  </data>
+  <data name="Tasks_DueToday" xml:space="preserve">
+    <value>{0} due today</value>
+  </data>
+  <data name="Tasks_NothingElseToday" xml:space="preserve">
+    <value>Nothing else due today</value>
+  </data>
+  <data name="Tasks_Overdue" xml:space="preserve">
+    <value>{0} overdue</value>
+  </data>
+  <data name="Tasks_Done" xml:space="preserve">
+    <value>“{0}” done</value>
+  </data>
+  <data name="Tasks_DoneNext" xml:space="preserve">
+    <value>Done. Next one {0}</value>
+  </data>
+  <data name="TaskRow_Aria" xml:space="preserve">
+    <value>Done: {0}</value>
+  </data>
+  <data name="TaskRow_DoneByYou" xml:space="preserve">
+    <value>Done by you</value>
+  </data>
+  <data name="TaskRow_DoneBy" xml:space="preserve">
+    <value>Done by {0}</value>
+  </data>
+  <data name="TaskRow_Someone" xml:space="preserve">
+    <value>someone</value>
+  </data>
+  <data name="Group_Overdue" xml:space="preserve">
+    <value>Overdue</value>
+  </data>
+  <data name="Group_Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Group_Tomorrow" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
+  <data name="Group_ThisWeek" xml:space="preserve">
+    <value>This week</value>
+  </data>
+  <data name="Group_NextWeek" xml:space="preserve">
+    <value>Next week</value>
+  </data>
+  <data name="Group_Later" xml:space="preserve">
+    <value>Later</value>
+  </data>
+  <data name="Group_Someday" xml:space="preserve">
+    <value>Someday</value>
+  </data>
+  <data name="Due_NoDate" xml:space="preserve">
+    <value>No date</value>
+  </data>
+  <data name="Due_DayLate" xml:space="preserve">
+    <value>1 day late</value>
+  </data>
+  <data name="Due_DaysLate" xml:space="preserve">
+    <value>{0} days late</value>
+  </data>
+  <data name="Due_Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Due_Tomorrow" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
+  <data name="Due_WordTomorrow" xml:space="preserve">
+    <value>tomorrow</value>
+  </data>
+  <data name="Due_WordOn" xml:space="preserve">
+    <value>on {0}</value>
+  </data>
+  <data name="Choice_ThisWeekend" xml:space="preserve">
+    <value>This weekend</value>
+  </data>
+  <data name="Choice_NextWeek" xml:space="preserve">
+    <value>Next week</value>
+  </data>
+  <data name="Choice_PickDate" xml:space="preserve">
+    <value>Choose date</value>
+  </data>
+  <data name="Repeat_None" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="Repeat_Daily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="Repeat_Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="Repeat_Biweekly" xml:space="preserve">
+    <value>Every 2 weeks</value>
+  </data>
+  <data name="Repeat_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="Date_Short" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="Date_Long" xml:space="preserve">
+    <value>{0}, {1} {2}</value>
+  </data>
+  <data name="DayShort_0" xml:space="preserve">
+    <value>Sun</value>
+  </data>
+  <data name="DayShort_1" xml:space="preserve">
+    <value>Mon</value>
+  </data>
+  <data name="DayShort_2" xml:space="preserve">
+    <value>Tue</value>
+  </data>
+  <data name="DayShort_3" xml:space="preserve">
+    <value>Wed</value>
+  </data>
+  <data name="DayShort_4" xml:space="preserve">
+    <value>Thu</value>
+  </data>
+  <data name="DayShort_5" xml:space="preserve">
+    <value>Fri</value>
+  </data>
+  <data name="DayShort_6" xml:space="preserve">
+    <value>Sat</value>
+  </data>
+  <data name="DayLong_0" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="DayLong_1" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="DayLong_2" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="DayLong_3" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="DayLong_4" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="DayLong_5" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="DayLong_6" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="MonthShort_1" xml:space="preserve">
+    <value>Jan</value>
+  </data>
+  <data name="MonthShort_2" xml:space="preserve">
+    <value>Feb</value>
+  </data>
+  <data name="MonthShort_3" xml:space="preserve">
+    <value>Mar</value>
+  </data>
+  <data name="MonthShort_4" xml:space="preserve">
+    <value>Apr</value>
+  </data>
+  <data name="MonthShort_5" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MonthShort_6" xml:space="preserve">
+    <value>Jun</value>
+  </data>
+  <data name="MonthShort_7" xml:space="preserve">
+    <value>Jul</value>
+  </data>
+  <data name="MonthShort_8" xml:space="preserve">
+    <value>Aug</value>
+  </data>
+  <data name="MonthShort_9" xml:space="preserve">
+    <value>Sep</value>
+  </data>
+  <data name="MonthShort_10" xml:space="preserve">
+    <value>Oct</value>
+  </data>
+  <data name="MonthShort_11" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="MonthShort_12" xml:space="preserve">
+    <value>Dec</value>
+  </data>
+  <data name="MonthLong_1" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="MonthLong_2" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="MonthLong_3" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="MonthLong_4" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="MonthLong_5" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MonthLong_6" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="MonthLong_7" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="MonthLong_8" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="MonthLong_9" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="MonthLong_10" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="MonthLong_11" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="MonthLong_12" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="TaskSheet_New" xml:space="preserve">
+    <value>New task</value>
+  </data>
+  <data name="TaskSheet_Edit" xml:space="preserve">
+    <value>Edit task</value>
+  </data>
+  <data name="TaskSheet_Placeholder" xml:space="preserve">
+    <value>What needs doing?</value>
+  </data>
+  <data name="TaskSheet_Who" xml:space="preserve">
+    <value>Who</value>
+  </data>
+  <data name="TaskSheet_Me" xml:space="preserve">
+    <value>Me</value>
+  </data>
+  <data name="TaskSheet_Anyone" xml:space="preserve">
+    <value>Anyone</value>
+  </data>
+  <data name="TaskSheet_When" xml:space="preserve">
+    <value>When</value>
+  </data>
+  <data name="TaskSheet_Repeats" xml:space="preserve">
+    <value>Repeats</value>
+  </data>
+  <data name="Groceries_Eyebrow" xml:space="preserve">
+    <value>Shared with everyone</value>
+  </data>
+  <data name="Groceries_Shop" xml:space="preserve">
+    <value>Shop</value>
+  </data>
+  <data name="Groceries_DoneShopping" xml:space="preserve">
+    <value>Done shopping</value>
+  </data>
+  <data name="Groceries_QuickPlaceholder" xml:space="preserve">
+    <value>Add an item, e.g. 2 lemons</value>
+  </data>
+  <data name="Groceries_BoughtRecently" xml:space="preserve">
+    <value>Bought recently</value>
+  </data>
+  <data name="Groceries_Empty_Title" xml:space="preserve">
+    <value>The list is empty</value>
+  </data>
+  <data name="Groceries_Empty_Text" xml:space="preserve">
+    <value>Add what you need above.</value>
+  </data>
+  <data name="Groceries_InCart" xml:space="preserve">
+    <value>In cart</value>
+  </data>
+  <data name="Groceries_FinishTrip" xml:space="preserve">
+    <value>Finish trip</value>
+  </data>
+  <data name="Groceries_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Groceries_AddItem" xml:space="preserve">
+    <value>Add item</value>
+  </data>
+  <data name="Groceries_InTheCart" xml:space="preserve">
+    <value>{0} of {1} in the cart</value>
+  </data>
+  <data name="Groceries_ToBuy" xml:space="preserve">
+    <value>{0} to buy</value>
+  </data>
+  <data name="Groceries_InCartCount" xml:space="preserve">
+    <value>{0} in cart</value>
+  </data>
+  <data name="Groceries_Cleared_One" xml:space="preserve">
+    <value>1 item cleared</value>
+  </data>
+  <data name="Groceries_Cleared_Other" xml:space="preserve">
+    <value>{0} items cleared</value>
+  </data>
+  <data name="GroceryRow_Aria" xml:space="preserve">
+    <value>In cart: {0}</value>
+  </data>
+  <data name="GrocerySheet_New" xml:space="preserve">
+    <value>Add to groceries</value>
+  </data>
+  <data name="GrocerySheet_Edit" xml:space="preserve">
+    <value>Edit item</value>
+  </data>
+  <data name="GrocerySheet_Placeholder" xml:space="preserve">
+    <value>Item name</value>
+  </data>
+  <data name="GrocerySheet_Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="GrocerySheet_Less" xml:space="preserve">
+    <value>Less</value>
+  </data>
+  <data name="GrocerySheet_More" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="GrocerySheet_Aisle" xml:space="preserve">
+    <value>Aisle</value>
+  </data>
+  <data name="Aisle_Produce" xml:space="preserve">
+    <value>Produce</value>
+  </data>
+  <data name="Aisle_DairyEggs" xml:space="preserve">
+    <value>Dairy &amp; eggs</value>
+  </data>
+  <data name="Aisle_Bakery" xml:space="preserve">
+    <value>Bakery</value>
+  </data>
+  <data name="Aisle_MeatFish" xml:space="preserve">
+    <value>Meat &amp; fish</value>
+  </data>
+  <data name="Aisle_Pantry" xml:space="preserve">
+    <value>Pantry</value>
+  </data>
+  <data name="Aisle_Frozen" xml:space="preserve">
+    <value>Frozen</value>
+  </data>
+  <data name="Aisle_Household" xml:space="preserve">
+    <value>Household</value>
+  </data>
+  <data name="Aisle_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Household_People_One" xml:space="preserve">
+    <value>{0} person</value>
+  </data>
+  <data name="Household_People_Other" xml:space="preserve">
+    <value>{0} people</value>
+  </data>
+  <data name="Household_DoneThisWeek_One" xml:space="preserve">
+    <value>{0} task done this week</value>
+  </data>
+  <data name="Household_DoneThisWeek_Other" xml:space="preserve">
+    <value>{0} tasks done this week</value>
+  </data>
+  <data name="Household_ThisWeek" xml:space="preserve">
+    <value>Done this week</value>
+  </data>
+  <data name="Household_You" xml:space="preserve">
+    <value>{0} (you)</value>
+  </data>
+  <data name="Household_MemberStats" xml:space="preserve">
+    <value>{0} done · {1} open</value>
+  </data>
+  <data name="Household_Invite" xml:space="preserve">
+    <value>Invite someone</value>
+  </data>
+  <data name="Household_InviteHelp" xml:space="preserve">
+    <value>They enter this code when they sign up.</value>
+  </data>
+  <data name="Household_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Household_Copied" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="Household_CopyFailed" xml:space="preserve">
+    <value>Couldn't copy. Select the code and copy it yourself.</value>
+  </data>
+  <data name="Household_Appearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Theme_System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Household_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Household_Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Household_SignedInAs" xml:space="preserve">
+    <value>Signed in as</value>
+  </data>
+  <data name="Household_CurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="Household_NewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="Household_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="Household_PasswordChanged" xml:space="preserve">
+    <value>Password changed</value>
+  </data>
+  <data name="Household_ManageMembers" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Household_SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Admin_Eyebrow" xml:space="preserve">
+    <value>Household</value>
+  </data>
+  <data name="Admin_Title" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Admin_Summary" xml:space="preserve">
+    <value>{0} in {1}</value>
+  </data>
+  <data name="Admin_People" xml:space="preserve">
+    <value>People</value>
+  </data>
+  <data name="Role_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Role_Member" xml:space="preserve">
+    <value>Member</value>
+  </data>
+  <data name="Admin_RemoveAria" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="Admin_RemoveTitle" xml:space="preserve">
+    <value>Remove {0}?</value>
+  </data>
+  <data name="Admin_RemoveText" xml:space="preserve">
+    <value>Their account is deleted and they're signed out. Tasks assigned to them become anyone's. This can't be undone.</value>
+  </data>
+  <data name="Admin_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Admin_Removed" xml:space="preserve">
+    <value>{0} was removed. To keep them from joining again, make a new invite code.</value>
+  </data>
+  <data name="Admin_InviteCode" xml:space="preserve">
+    <value>Invite code</value>
+  </data>
+  <data name="Admin_InviteHelp" xml:space="preserve">
+    <value>A new code stops the old one from working. Everyone who joined stays.</value>
+  </data>
+  <data name="Admin_NewCode" xml:space="preserve">
+    <value>New code</value>
+  </data>
+  <data name="Admin_NewCodeTitle" xml:space="preserve">
+    <value>Make a new invite code?</value>
+  </data>
+  <data name="Admin_NewCodeText" xml:space="preserve">
+    <value>The current code stops working. Everyone who already joined stays.</value>
+  </data>
+  <data name="Admin_NewCodeMade" xml:space="preserve">
+    <value>New invite code made</value>
+  </data>
+  <data name="Admin_Week" xml:space="preserve">
+    <value>Week</value>
+  </data>
+  <data name="Admin_WeekStart" xml:space="preserve">
+    <value>Week starts on</value>
+  </data>
+  <data name="Admin_WeekStartHelp" xml:space="preserve">
+    <value>Decides what counts as this week and next week in the task list and the household stats, and the first column of the calendar.</value>
+  </data>
+  <data name="Admin_WeekStartSaved" xml:space="preserve">
+    <value>Weeks now start on {0}</value>
+  </data>
+  <data name="Admin_ApiKeys" xml:space="preserve">
+    <value>API keys</value>
+  </data>
+  <data name="Admin_ApiKeysHelp" xml:space="preserve">
+    <value>For automations like Home Assistant or n8n. A key can do everything you can, so keep it as safe as your password.</value>
+  </data>
+  <data name="Admin_NewKey" xml:space="preserve">
+    <value>New key</value>
+  </data>
+  <data name="Admin_KeyName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Admin_KeyNameHelp" xml:space="preserve">
+    <value>What it's for, like Home Assistant</value>
+  </data>
+  <data name="Admin_CreateKey" xml:space="preserve">
+    <value>Create key</value>
+  </data>
+  <data name="Admin_KeyShownOnce" xml:space="preserve">
+    <value>Copy this key now. You won't be able to see it again.</value>
+  </data>
+  <data name="Admin_KeyUsage" xml:space="preserve">
+    <value>Automations send it with every request, as this header:</value>
+  </data>
+  <data name="Admin_KeyDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Admin_KeyCopyFailed" xml:space="preserve">
+    <value>Couldn't copy. Select the key and copy it yourself.</value>
+  </data>
+  <data name="Admin_KeyNeverUsed" xml:space="preserve">
+    <value>Not used yet</value>
+  </data>
+  <data name="Admin_KeyUsedToday" xml:space="preserve">
+    <value>Used today</value>
+  </data>
+  <data name="Admin_KeyUsedOn" xml:space="preserve">
+    <value>Last used {0}</value>
+  </data>
+  <data name="Admin_RevokeAria" xml:space="preserve">
+    <value>Revoke {0}</value>
+  </data>
+  <data name="Admin_RevokeTitle" xml:space="preserve">
+    <value>Revoke {0}?</value>
+  </data>
+  <data name="Admin_RevokeText" xml:space="preserve">
+    <value>Anything that uses this key stops working straight away. This can't be undone.</value>
+  </data>
+  <data name="Admin_Revoke" xml:space="preserve">
+    <value>Revoke</value>
+  </data>
+  <data name="Admin_Revoked" xml:space="preserve">
+    <value>{0} was revoked</value>
+  </data>
+</root>

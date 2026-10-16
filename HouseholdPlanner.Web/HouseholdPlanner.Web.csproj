@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <!--
+      The app writes dates with its own translated day and month names (see DateText), so it needs no ICU data.
+      Without this, every first visit downloads 0.5 MB of it (which Cloudflare doesn't compress) and loads it at
+      startup. Time zones are separate and still follow the device.
+    -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!--
+      Lets the app create the "nl" culture without ICU data. Its formatting stays invariant (the app writes
+      dates with its own translated words), but translations are looked up by its name.
+    -->
+    <PredefinedCulturesOnly>false</PredefinedCulturesOnly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.7" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.7" />
+    <PackageReference Include="MudBlazor" Version="9.11.0" />
+  </ItemGroup>
+
+  <!--
+    Cache busting for the assets index.html links without a fingerprint (app.css, MudBlazor). Cloudflare overrides our no-cache header on CSS/JS
+    with a 4-hour browser cache, so after a deploy phones kept the old styles. On publish, every
+    "?v=dev" in index.html becomes a hash of those files, so their URLs change whenever they do.
+  -->
+  <Target Name="StampAssetVersion" AfterTargets="Publish">
+    <PropertyGroup>
+      <_WwwRoot>$(PublishDir)wwwroot/</_WwwRoot>
+      <_IndexHtml>$(_WwwRoot)index.html</_IndexHtml>
+    </PropertyGroup>
+    <ItemGroup>
+      <_VersionedAsset Include="$(_WwwRoot)css/*.css;$(_WwwRoot)_content/MudBlazor/MudBlazor.min.css;$(_WwwRoot)_content/MudBlazor/MudBlazor.min.js" />
+    </ItemGroup>
+    <GetFileHash Files="@(_VersionedAsset)" Algorithm="SHA256">
+      <Output TaskParameter="Items" ItemName="_HashedAsset" />
+    </GetFileHash>
+    <!-- One short version for all of them: the hash of their hashes. -->
+    <WriteLinesToFile File="$(IntermediateOutputPath)asset-hashes.txt" Lines="@(_HashedAsset->'%(FileHash)')" Overwrite="true" />
+    <GetFileHash Files="$(IntermediateOutputPath)asset-hashes.txt" Algorithm="SHA256">
+      <Output TaskParameter="Hash" PropertyName="_AssetHash" />
+    </GetFileHash>
+    <PropertyGroup>
+      <_AssetVersion>$(_AssetHash.Substring(0, 10).ToLowerInvariant())</_AssetVersion>
+      <_IndexContent>$([System.IO.File]::ReadAllText($(_IndexHtml)).Replace('?v=dev', '?v=$(_AssetVersion)'))</_IndexContent>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(_IndexHtml)" Lines="$([MSBuild]::Escape($(_IndexContent)))" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <!-- The precompressed copies still hold the old links; nothing should serve them. -->
+    <Delete Files="$(_IndexHtml).br;$(_IndexHtml).gz" />
+    <Message Importance="high" Text="index.html asset version: $(_AssetVersion)" />
+  </Target>
+
+</Project>

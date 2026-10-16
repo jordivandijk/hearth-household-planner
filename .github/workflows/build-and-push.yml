@@ -1,5 +1,5 @@
-# TOn every push to main, build the API and web
-# images and push them tagged "stable".
+# The GitHub version of .gitea/workflows/build-and-push-compose.yml: on every push to main, build the API and web
+# images and push them tagged "stable". Gitea ignores this folder while .gitea/workflows exists.
 name: Build and Push
 
 on:

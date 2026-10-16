@@ -1,0 +1,107 @@
+@page "/"
+@inherits StoreComponent
+
+<PageTitle>@T["Nav_Tasks"] · Hearth</PageTitle>
+
+<PageHeader Eyebrow="@Dates.Long(Today)" Title="@T["Nav_Tasks"]" Summary="@(Store.Loaded ? Summary : null)">
+    <Actions>
+        <MudToggleGroup T="bool" @bind-Value="_mineOnly" Size="Size.Small" Color="Color.Secondary" CheckMark="false" Outlined="false"
+                        Class="mud-background-gray rounded-pill">
+            <MudToggleItem Value="false" Text="@T["Tasks_Everyone"]" />
+            <MudToggleItem Value="true" Text="@T["Tasks_Mine"]" />
+        </MudToggleGroup>
+    </Actions>
+</PageHeader>
+
+@if (Store.Loaded && OpenTasks.Count == 0 && DoneTasks.Count == 0)
+{
+    <EmptyState Title="@T["Tasks_Empty_Title"]" Text="@T["Tasks_Empty_Text"]" />
+}
+
+@foreach (var group in DueDates.Groups)
+{
+    var tasks = OpenTasks.Where(t => DueDates.Group(t.Due, Today, Store.WeekStart) == group).ToList();
+    if (tasks.Count > 0)
+    {
+        <SectionGroup Title="@Dates.Group(group)" Items="tasks" TitleColor="@(group == DueGroup.Overdue ? Color.Tertiary : Color.Default)">
+            <Row>
+                <TaskRow Task="context" Group="group" Checking="_checking.Contains(context.Id)" OnToggle="ToggleAsync" OnOpen="OpenAsync" />
+            </Row>
+        </SectionGroup>
+    }
+}
+
+@if (DoneTasks.Count > 0)
+{
+    <SectionGroup Title="@T["Tasks_Completed"]" Items="DoneTasks.Take(20).ToList()" Count="DoneTasks.Count" Collapsible @bind-Expanded="_showDone">
+        <Row>
+            <TaskRow Task="context" OnToggle="ToggleAsync" OnOpen="OpenAsync" />
+        </Row>
+    </SectionGroup>
+}
+
+<MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Large" Class="app-fab" aria-label="@T["Tasks_AddTask"]"
+        OnClick="() => _sheet.ShowAsync()" />
+
+<TaskSheet @ref="_sheet" />
+
+@code {
+    private TaskSheet _sheet = default!;
+    private bool _mineOnly;
+    private bool _showDone;
+    /// <summary>Tasks ticked a moment ago, before the completion is saved.</summary>
+    private readonly HashSet<Guid> _checking = [];
+
+    private Guid? Me => Store.Me?.Id;
+
+    private List<HouseholdTask> OpenTasks => Store.Tasks
+        .Where(t => !t.Done && (!_mineOnly || t.AssigneeId == Me))
+        .OrderBy(t => t.Due ?? DateOnly.MaxValue)
+        .ToList();
+
+    private List<HouseholdTask> DoneTasks => Store.Tasks
+        .Where(t => t.Done && (!_mineOnly || t.AssigneeId == Me || t.DoneById == Me))
+        .OrderByDescending(t => t.DoneAt)
+        .ToList();
+
+    private string Summary
+    {
+        get
+        {
+            var today   = OpenTasks.Count(t => t.Due == Today);
+            var overdue = OpenTasks.Count(t => t.Due < Today);
+            if (today == 0 && overdue == 0)
+                return T["Tasks_AllCaughtUp"];
+            string first = today > 0 ? T["Tasks_DueToday", today] : T["Tasks_NothingElseToday"];
+            return overdue > 0 ? $"{first} · {T["Tasks_Overdue", overdue]}" : first;
+        }
+    }
+
+    private async Task ToggleAsync(HouseholdTask task)
+    {
+        if (task.Done)
+        {
+            await TryAsync(() => Store.ReopenTaskAsync(task.Id));
+            return;
+        }
+
+        // Ignore taps while the tick is showing.
+        if (!_checking.Add(task.Id))
+            return;
+
+        // Shows the tick and strikes the title through for a moment, before the task moves.
+        await Task.Delay(560);
+        await TryAsync(async () =>
+        {
+            var result = await Store.CompleteTaskAsync(task.Id);
+            string message = task.Repeat == TaskRepeat.None || result.Task.Due is not { } next
+                ? T["Tasks_Done", task.Title]
+                : T["Tasks_DoneNext", Dates.Word(next, Today)];
+            ShowUndo(message, () => Store.UndoCompletionAsync(result.CompletionId));
+        });
+        _checking.Remove(task.Id);
+    }
+
+    private Task OpenAsync(HouseholdTask task)
+        => _checking.Contains(task.Id) ? Task.CompletedTask : _sheet.ShowAsync(task);
+}

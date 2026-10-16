@@ -1,0 +1,54 @@
+@inject HomeStore Store
+@inject IStringLocalizer<Strings> T
+@inject DateText Dates
+
+<MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="pl-1 pr-3 py-1" Style="@(Task.Done ? "opacity: .6" : null)">
+    <MudCheckBox T="bool" Value="@IsChecked" ValueChanged="_ => OnToggle.InvokeAsync(Task)" Color="Color.Primary"
+                 CheckedIcon="@Icons.Material.Filled.CheckCircle" UncheckedIcon="@Icons.Material.Outlined.Circle"
+                 AriaLabel="@T["TaskRow_Aria", Task.Title]" />
+    <MudStack Spacing="0" Class="flex-grow-1 cursor-pointer py-1" Style="min-width: 0" @onclick="() => OnOpen.InvokeAsync(Task)">
+        <MudText Typo="Typo.body1" Class="@(IsChecked ? "mud-text-disabled" : null)" Style="@(IsChecked ? "text-decoration: line-through" : null)">
+            @Task.Title
+        </MudText>
+        @if (Meta is { Length: > 0 })
+        {
+            <MudText Typo="Typo.caption" Color="@(Group == DueGroup.Overdue ? Color.Tertiary : Color.Default)"
+                     Class="@(Group == DueGroup.Overdue ? null : "mud-text-secondary")">@Meta</MudText>
+        }
+    </MudStack>
+    <MemberAvatar Member="Store.MemberById(Task.AssigneeId)" />
+</MudStack>
+
+@code {
+    [Parameter, EditorRequired] public HouseholdTask Task { get; set; } = default!;
+    /// <summary>The group the row is in, which decides what the second line says. Null for completed tasks.</summary>
+    [Parameter] public DueGroup? Group { get; set; }
+    /// <summary>Ticked, but not saved yet.</summary>
+    [Parameter] public bool Checking { get; set; }
+    [Parameter] public EventCallback<HouseholdTask> OnToggle { get; set; }
+    [Parameter] public EventCallback<HouseholdTask> OnOpen { get; set; }
+
+    private bool IsChecked => Task.Done || Checking;
+
+    private string Meta
+    {
+        get
+        {
+            if (Task.Done)
+            {
+                if (Task.DoneById is not { } by)
+                    return "";
+                return by == Store.Me?.Id ? T["TaskRow_DoneByYou"] : T["TaskRow_DoneBy", Store.MemberById(by)?.Username ?? T["TaskRow_Someone"]];
+            }
+
+            var parts = new List<string>();
+            if (Group is DueGroup.Overdue or DueGroup.ThisWeek or DueGroup.Later)
+                parts.Add(Dates.Label(Task.Due, DueDates.Today));
+            else if (Group is DueGroup.NextWeek && Task.Due is { } due)
+                parts.Add(Dates.Weekday(due));   // the group says which week
+            if (Task.Repeat != TaskRepeat.None)
+                parts.Add($"↻ {Dates.Repeat(Task.Repeat)}");
+            return string.Join(" · ", parts);
+        }
+    }
+}

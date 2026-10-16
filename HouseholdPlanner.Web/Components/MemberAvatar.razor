@@ -1,0 +1,18 @@
+@inject ThemeState ThemeState
+@inject IStringLocalizer<Strings> T
+
+@* A member's initial in their colour; a dashed circle for "anyone". *@
+@if (Member is null)
+{
+    <MudAvatar Size="Size" Variant="Variant.Outlined" Style="border-style: dashed; background: transparent" aria-label="@T["TaskSheet_Anyone"]" />
+}
+else
+{
+    <MudAvatar Size="Size" Style="@($"background: {ThemeState.AvatarColor(Member.Hue)}; color: {ThemeState.AvatarInk}; font-weight: 700")"
+               title="@Member.Username">@Member.Initial</MudAvatar>
+}
+
+@code {
+    [Parameter] public Member? Member { get; set; }
+    [Parameter] public Size Size { get; set; } = Size.Small;
+}

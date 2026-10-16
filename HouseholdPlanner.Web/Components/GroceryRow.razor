@@ -1,0 +1,26 @@
+@inject IStringLocalizer<Strings> T
+
+<MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="@(Large ? "pl-1 pr-4 py-2" : "pl-1 pr-3")" Style="@(Item.InCart ? "opacity: .6" : null)">
+    <MudCheckBox T="bool" Value="@IsChecked" ValueChanged="_ => OnToggle.InvokeAsync(Item)" Color="Color.Primary"
+                 AriaLabel="@T["GroceryRow_Aria", Item.Name]" />
+    <MudText Typo="@(Large ? Typo.h6 : Typo.body1)" Class="@($"flex-grow-1 cursor-pointer {(IsChecked ? "mud-text-disabled" : "")}")"
+             Style="@(IsChecked ? "text-decoration: line-through" : null)" @onclick="() => OnOpen.InvokeAsync(Item)">
+        @Item.Name
+    </MudText>
+    @if (Item.Quantity > 1)
+    {
+        <MudChip T="string" Size="Size.Small" Text="@($"×{Item.Quantity}")" />
+    }
+</MudStack>
+
+@code {
+    [Parameter, EditorRequired] public GroceryItem Item { get; set; } = default!;
+    /// <summary>Ticked, but not saved yet.</summary>
+    [Parameter] public bool Checking { get; set; }
+    /// <summary>Bigger rows while shopping.</summary>
+    [Parameter] public bool Large { get; set; }
+    [Parameter] public EventCallback<GroceryItem> OnToggle { get; set; }
+    [Parameter] public EventCallback<GroceryItem> OnOpen { get; set; }
+
+    private bool IsChecked => Item.InCart || Checking;
+}

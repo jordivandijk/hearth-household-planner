@@ -1,0 +1,80 @@
+@page "/login"
+@layout LoginLayout
+@attribute [AllowAnonymous]
+@inject IAuthService AuthService
+@inject NavigationManager Nav
+@inject IStringLocalizer<Strings> T
+
+<PageTitle>@T["Login_PageTitle"] · Hearth</PageTitle>
+
+<form @onsubmit="LoginAsync">
+    <MudStack Spacing="3">
+        <MudText Typo="Typo.h4" HtmlTag="h1">@T["Login_Title"]</MudText>
+        <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-2">@T["Login_Subtitle"]</MudText>
+
+        @if (Expired && _error is null)
+        {
+            <MudAlert Severity="Severity.Info" Dense>@T["Error_SessionExpired"]</MudAlert>
+        }
+        @if (_error is not null)
+        {
+            <MudAlert Severity="Severity.Error" Dense>@_error</MudAlert>
+        }
+
+        <MudTextField @bind-Value="_username" Label="@T["Login_Username"]" Variant="Variant.Outlined" AutoFocus Immediate
+                      UserAttributes="@(new() { ["autocomplete"] = "username", ["autocapitalize"] = "none", ["autocorrect"] = "off", ["spellcheck"] = "false" })" />
+        <MudTextField @bind-Value="_password" Label="@T["Login_Password"]" InputType="InputType.Password" Variant="Variant.Outlined" Immediate
+                      UserAttributes="@(new() { ["autocomplete"] = "current-password" })" />
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth
+                   DropShadow="false" Disabled="_busy" Class="mt-2">
+            @(_busy ? T["Login_SigningIn"] : T["Login_SignIn"])
+        </MudButton>
+        <MudText Typo="Typo.body2" Align="Align.Center" Class="mud-text-secondary">
+            @T["Login_HaveCode"] <MudLink Href="/register" Typo="Typo.body2">@T["Login_CreateAccount"]</MudLink>
+        </MudText>
+    </MudStack>
+</form>
+
+@code {
+    [SupplyParameterFromQuery] public bool Expired { get; set; }
+    [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; } = default!;
+
+    private string _username = "";
+    private string _password = "";
+    private string? _error;
+    private bool _busy;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if ((await AuthState).User.Identity?.IsAuthenticated == true)
+            Nav.NavigateTo(LoginRedirect.Destination(Nav, ReturnUrl), replace: true);
+    }
+
+    private async Task LoginAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(_password))
+        {
+            _error = T["Login_Missing"];
+            return;
+        }
+
+        _busy = true;
+        _error = null;
+        try
+        {
+            if (await AuthService.LoginAsync(_username.Trim(), _password))
+                Nav.NavigateTo(LoginRedirect.Destination(Nav, ReturnUrl));
+            else
+                _error = T["Login_Invalid"];
+        }
+        catch (ApiException ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+}

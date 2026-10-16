@@ -1,0 +1,68 @@
+@page "/register"
+@layout LoginLayout
+@attribute [AllowAnonymous]
+@inject IAuthService AuthService
+@inject NavigationManager Nav
+@inject IStringLocalizer<Strings> T
+
+<PageTitle>@T["Register_Title"] · Hearth</PageTitle>
+
+<form @onsubmit="RegisterAsync">
+    <MudStack Spacing="3">
+        <MudText Typo="Typo.h4" HtmlTag="h1">@T["Register_Title"]</MudText>
+        <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-2">@T["Register_Subtitle"]</MudText>
+
+        @if (_error is not null)
+        {
+            <MudAlert Severity="Severity.Error" Dense>@_error</MudAlert>
+        }
+
+        <MudTextField @bind-Value="_inviteCode" Label="@T["Register_InviteCode"]" Placeholder="ABCD-1234" Variant="Variant.Outlined" AutoFocus Immediate
+                      UserAttributes="@(new() { ["autocapitalize"] = "characters", ["autocorrect"] = "off", ["spellcheck"] = "false" })" />
+        <MudTextField @bind-Value="_username" Label="@T["Register_Name"]" HelperText="@T["Register_NameHelp"]"
+                      Variant="Variant.Outlined" Immediate
+                      UserAttributes="@(new() { ["autocomplete"] = "username", ["autocorrect"] = "off", ["spellcheck"] = "false" })" />
+        <MudTextField @bind-Value="_password" Label="@T["Login_Password"]" HelperText="@T["Common_PasswordHelp"]" InputType="InputType.Password"
+                      Variant="Variant.Outlined" Immediate UserAttributes="@(new() { ["autocomplete"] = "new-password" })" />
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth
+                   DropShadow="false" Disabled="_busy" Class="mt-2">
+            @(_busy ? T["Register_Creating"] : T["Register_Create"])
+        </MudButton>
+        <MudText Typo="Typo.body2" Align="Align.Center" Class="mud-text-secondary">
+            @T["Register_HaveAccount"] <MudLink Href="/login" Typo="Typo.body2">@T["Login_SignIn"]</MudLink>
+        </MudText>
+    </MudStack>
+</form>
+
+@code {
+    private string _inviteCode = "";
+    private string _username = "";
+    private string _password = "";
+    private string? _error;
+    private bool _busy;
+
+    private async Task RegisterAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_inviteCode) || _username.Trim().Length < 2 || _password.Length < 6)
+        {
+            _error = T["Register_Missing"];
+            return;
+        }
+
+        _busy = true;
+        _error = null;
+        try
+        {
+            await AuthService.RegisterAsync(_inviteCode.Trim(), _username.Trim(), _password);
+            Nav.NavigateTo("/");
+        }
+        catch (ApiException ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+}

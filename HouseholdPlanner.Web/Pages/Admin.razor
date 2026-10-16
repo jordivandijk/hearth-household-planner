@@ -1,0 +1,227 @@
+@page "/admin"
+@attribute [Authorize(Roles = "Admin")]
+@using HouseholdPlanner.Web.ApiClients.Interfaces
+@inherits StoreComponent
+@inject IDialogService Dialogs
+@inject IApiKeyApiClient ApiKeys
+@inject IJSRuntime JS
+
+<PageTitle>@T["Admin_Title"] · Hearth</PageTitle>
+
+<PageHeader Eyebrow="@T["Admin_Eyebrow"]" Title="@T["Admin_Title"]" Summary="@Summary">
+    <Actions>
+        <MudButton Href="/household" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBack">@T["Common_Back"]</MudButton>
+    </Actions>
+</PageHeader>
+
+<SectionGroup Title="@T["Admin_People"]" Items="Store.Members">
+    <Row>
+        <MudStack Row AlignItems="AlignItems.Center" Spacing="3" Class="px-4 py-2">
+            <MemberAvatar Member="context" Size="Size.Medium" />
+            <MudStack Spacing="0" Class="flex-grow-1" Style="min-width: 0">
+                <MudText Typo="Typo.body1" Class="text-truncate">@(context.Id == Store.Me?.Id ? T["Household_You", context.Username] : context.Username)</MudText>
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">@(context.IsAdmin ? T["Role_Admin"] : T["Role_Member"])</MudText>
+            </MudStack>
+            @if (context.Id != Store.Me?.Id)
+            {
+                <MudIconButton Icon="@Icons.Material.Outlined.PersonRemove" Color="Color.Error" aria-label="@T["Admin_RemoveAria", context.Username]"
+                               OnClick="() => RemoveAsync(context)" />
+            }
+        </MudStack>
+    </Row>
+</SectionGroup>
+
+<div class="px-3 pt-4">
+    <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Admin_InviteCode"]</MudText>
+    <MudPaper Outlined Class="pa-4 mt-2">
+        <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="3">
+            <MudStack Spacing="1">
+                <MudText Typo="Typo.h5" Style="letter-spacing: .08em; font-variant-numeric: tabular-nums">@Store.Household?.InviteCode</MudText>
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">@T["Admin_InviteHelp"]</MudText>
+            </MudStack>
+            <MudButton Variant="Variant.Outlined" Class="flex-shrink-0" OnClick="RenewInviteCodeAsync">@T["Admin_NewCode"]</MudButton>
+        </MudStack>
+    </MudPaper>
+</div>
+
+<div class="px-3 pt-4">
+    <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Admin_Week"]</MudText>
+    <MudPaper Outlined Class="pa-4 mt-2">
+        <MudSelect T="DayOfWeek" Value="Store.WeekStart" ValueChanged="SetWeekStartAsync" Label="@T["Admin_WeekStart"]"
+                   HelperText="@T["Admin_WeekStartHelp"]" Variant="Variant.Outlined" Disabled="Store.Household is null">
+            @foreach (var day in WeekDays)
+            {
+                <MudSelectItem Value="day">@DayName(day)</MudSelectItem>
+            }
+        </MudSelect>
+    </MudPaper>
+</div>
+
+<div class="px-3 pt-4">
+    <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Admin_ApiKeys"]</MudText>
+    <MudPaper Outlined Class="mt-2 overflow-hidden">
+        @if (_created is { } created)
+        {
+            @* The key itself is only in this response, so it's shown until the admin says they have it. *@
+            <MudStack Spacing="3" Class="pa-4">
+                <MudAlert Severity="Severity.Warning" Dense>@T["Admin_KeyShownOnce"]</MudAlert>
+                <MudTextField Value="created.Key" Label="@created.ApiKey.Name" ReadOnly Variant="Variant.Outlined"
+                              Adornment="Adornment.End" AdornmentIcon="@(_copied ? Icons.Material.Filled.Check : Icons.Material.Outlined.ContentCopy)"
+                              AdornmentAriaLabel="@T["Household_Copy"]" OnAdornmentClick="CopyKeyAsync" />
+                <MudStack Spacing="1">
+                    <MudText Typo="Typo.caption" Class="mud-text-secondary">@T["Admin_KeyUsage"]</MudText>
+                    <MudText Typo="Typo.caption" HtmlTag="code">Authorization: Bearer @(created.ApiKey.Prefix)…</MudText>
+                </MudStack>
+                <MudStack Row Justify="Justify.FlexEnd">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="() => _created = null">@T["Admin_KeyDone"]</MudButton>
+                </MudStack>
+            </MudStack>
+        }
+        else if (_naming)
+        {
+            <MudStack Spacing="3" Class="pa-4">
+                <MudTextField @bind-Value="_name" Label="@T["Admin_KeyName"]" HelperText="@T["Admin_KeyNameHelp"]" Variant="Variant.Outlined"
+                              MaxLength="50" Immediate AutoFocus OnKeyDown="OnNameKeyDownAsync" />
+                <MudStack Row Justify="Justify.FlexEnd">
+                    <MudButton OnClick="() => _naming = false">@T["Common_Cancel"]</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" Disabled="string.IsNullOrWhiteSpace(_name)"
+                               OnClick="CreateKeyAsync">@T["Admin_CreateKey"]</MudButton>
+                </MudStack>
+            </MudStack>
+        }
+        else
+        {
+            <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="3" Class="pa-4">
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">@T["Admin_ApiKeysHelp"]</MudText>
+                <MudButton Variant="Variant.Outlined" Class="flex-shrink-0" OnClick="StartNaming">@T["Admin_NewKey"]</MudButton>
+            </MudStack>
+        }
+        @foreach (var key in _keys)
+        {
+            <MudDivider />
+            <MudStack Row AlignItems="AlignItems.Center" Spacing="3" Class="px-4 py-2">
+                <MudIcon Icon="@Icons.Material.Outlined.Key" Class="mud-text-secondary" />
+                <MudStack Spacing="0" Class="flex-grow-1" Style="min-width: 0">
+                    <MudText Typo="Typo.body1" Class="text-truncate">@key.Name</MudText>
+                    <MudText Typo="Typo.caption" Class="mud-text-secondary text-truncate">@key.Prefix… · @LastUsed(key)</MudText>
+                </MudStack>
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Color="Color.Error" aria-label="@T["Admin_RevokeAria", key.Name]"
+                               OnClick="() => RevokeKeyAsync(key)" />
+            </MudStack>
+        }
+    </MudPaper>
+</div>
+
+@code {
+    private string? Summary => Store.Household is { } h
+        ? T["Admin_Summary", T.Plural("Household_People", h.Members.Count), h.Name].Value
+        : null;
+
+    private List<ApiKey> _keys = [];
+    private bool _naming;
+    private string _name = "";
+    private CreatedApiKey? _created;
+    private bool _copied;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.WhenAll(TryAsync(Store.RefreshHouseholdAsync), TryAsync(async () => _keys = await ApiKeys.GetAllAsync()));
+    }
+
+    private async Task RemoveAsync(Member member)
+    {
+        var confirmed = await Dialogs.ShowMessageBoxAsync(
+            T["Admin_RemoveTitle", member.Username],
+            T["Admin_RemoveText"],
+            yesText: T["Admin_Remove"], cancelText: T["Common_Cancel"]);
+        if (confirmed != true)
+            return;
+
+        if (await TryAsync(() => Store.RemoveMemberAsync(member.Id)))
+            Snackbar.Add(T["Admin_Removed", member.Username], Severity.Success);
+    }
+
+    private async Task RenewInviteCodeAsync()
+    {
+        var confirmed = await Dialogs.ShowMessageBoxAsync(
+            T["Admin_NewCodeTitle"],
+            T["Admin_NewCodeText"],
+            yesText: T["Admin_NewCode"], cancelText: T["Common_Cancel"]);
+        if (confirmed == true && await TryAsync(Store.RenewInviteCodeAsync))
+            Snackbar.Add(T["Admin_NewCodeMade"], Severity.Success);
+    }
+
+    /// <summary>Monday to Sunday.</summary>
+    private static readonly DayOfWeek[] WeekDays = [.. Enumerable.Range(1, 7).Select(d => (DayOfWeek)(d % 7))];
+
+    /// <summary>"Monday", capitalised, since Dutch day names are written in lower case.</summary>
+    private string DayName(DayOfWeek day) => Dates.DayName(day) is { Length: > 0 } name ? name[..1].ToUpperInvariant() + name[1..] : "";
+
+    private async Task SetWeekStartAsync(DayOfWeek day)
+    {
+        if (await TryAsync(() => Store.SetWeekStartAsync(day)))
+            Snackbar.Add(T["Admin_WeekStartSaved", Dates.DayName(day)], Severity.Success);
+    }
+
+    /// <summary>"Used today", "Last used Oct 14" or "Not used yet", in the device's time zone.</summary>
+    private string LastUsed(ApiKey key)
+    {
+        if (key.LastUsedAt is not { } used)
+            return T["Admin_KeyNeverUsed"];
+        var day = DateOnly.FromDateTime(used.ToLocalTime());
+        return day == Today ? T["Admin_KeyUsedToday"] : T["Admin_KeyUsedOn", Dates.Short(day)];
+    }
+
+    private void StartNaming() => (_naming, _name) = (true, "");
+
+    private async Task OnNameKeyDownAsync(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await CreateKeyAsync();
+    }
+
+    private async Task CreateKeyAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_name))
+            return;
+
+        await TryAsync(async () =>
+        {
+            var created = await ApiKeys.CreateAsync(_name.Trim());
+            _keys.Add(created.ApiKey);
+            (_naming, _created, _copied) = (false, created, false);
+        });
+    }
+
+    private async Task CopyKeyAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", _created?.Key ?? "");
+        }
+        catch (JSException)
+        {
+            Snackbar.Add(T["Admin_KeyCopyFailed"], Severity.Warning);
+            return;
+        }
+        _copied = true;
+    }
+
+    private async Task RevokeKeyAsync(ApiKey key)
+    {
+        var confirmed = await Dialogs.ShowMessageBoxAsync(
+            T["Admin_RevokeTitle", key.Name],
+            T["Admin_RevokeText"],
+            yesText: T["Admin_Revoke"], cancelText: T["Common_Cancel"]);
+        if (confirmed != true)
+            return;
+
+        if (await TryAsync(() => ApiKeys.RevokeAsync(key.Id)))
+        {
+            _keys.Remove(key);
+            if (_created?.ApiKey.Id == key.Id)
+                _created = null;
+            Snackbar.Add(T["Admin_Revoked", key.Name], Severity.Success);
+        }
+    }
+}

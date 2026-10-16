@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="The account was deleted, or its role, household or password changed." xml:space="preserve">
+    <value>Het account is verwijderd, of de rol, het huishouden of het wachtwoord is veranderd.</value>
+  </data>
+  <data name="Current password is incorrect." xml:space="preserve">
+    <value>Het huidige wachtwoord klopt niet.</value>
+  </data>
+  <data name="Invalid username or password." xml:space="preserve">
+    <value>Onjuiste gebruikersnaam of wachtwoord.</value>
+  </data>
+  <data name="That person isn't in your household." xml:space="preserve">
+    <value>Die persoon hoort niet bij je huishouden.</value>
+  </data>
+  <data name="That task is already done." xml:space="preserve">
+    <value>Die taak is al gedaan.</value>
+  </data>
+  <data name="Username is already taken." xml:space="preserve">
+    <value>Die gebruikersnaam is al in gebruik.</value>
+  </data>
+  <data name="You can't remove your own account." xml:space="preserve">
+    <value>Je kunt je eigen account niet verwijderen.</value>
+  </data>
+  <data name="Your device's date looks wrong. Check its clock and try again." xml:space="preserve">
+    <value>De datum op je apparaat lijkt niet te kloppen. Controleer de klok en probeer het opnieuw.</value>
+  </data>
+  <data name="Your name needs at least 2 characters." xml:space="preserve">
+    <value>Je naam moet minstens 2 tekens hebben.</value>
+  </data>
+  <data name="A user with this username already exists." xml:space="preserve">
+    <value>Er bestaat al iemand met die gebruikersnaam.</value>
+  </data>
+  <data name="Completion not found." xml:space="preserve">
+    <value>Die afronding bestaat niet meer.</value>
+  </data>
+  <data name="Household not found." xml:space="preserve">
+    <value>Huishouden niet gevonden.</value>
+  </data>
+  <data name="Task not found." xml:space="preserve">
+    <value>Die taak bestaat niet meer.</value>
+  </data>
+  <data name="That invite code doesn't match a household." xml:space="preserve">
+    <value>Die uitnodigingscode hoort bij geen enkel huishouden.</value>
+  </data>
+  <data name="That item is no longer on the list." xml:space="preserve">
+    <value>Dat staat niet meer op de lijst.</value>
+  </data>
+  <data name="User not found." xml:space="preserve">
+    <value>Gebruiker niet gevonden.</value>
+  </data>
+  <data name="That language isn't available." xml:space="preserve">
+    <value>Die taal is niet beschikbaar.</value>
+  </data>
+  <data name="Give the key a name." xml:space="preserve">
+    <value>Geef de sleutel een naam.</value>
+  </data>
+  <data name="That API key no longer exists." xml:space="preserve">
+    <value>Die API-sleutel bestaat niet meer.</value>
+  </data>
+  <data name="Too many attempts. Wait a few minutes and try again." xml:space="preserve">
+    <value>Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.</value>
+  </data>
+</root>

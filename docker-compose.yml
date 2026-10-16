@@ -17,7 +17,7 @@ services:
 
 
   household-api:
-    image: git.tidewing.net/jordit/household-planner-api:${TAG:-stable}
+    image: ghcr.io/jordivandijk/household-planner-api:stable:${TAG:-stable}
     build:
       context: ./HouseholdPlanner.Api
       dockerfile: Dockerfile
@@ -51,7 +51,7 @@ services:
 
 
   household-web:
-    image: git.tidewing.net/jordit/household-planner-web:${TAG:-stable}
+    image: ghcr.io/jordivandijk/household-planner-web:${TAG:-stable}
     build:
       context: ./HouseholdPlanner.Web
       dockerfile: Dockerfile

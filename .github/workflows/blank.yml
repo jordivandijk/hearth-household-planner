@@ -1,0 +1,55 @@
+# TOn every push to main, build the API and web
+# images and push them tagged "stable".
+name: Build and Push
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  # The registry and the start of the image names. As set up here, the images go to GitHub's own registry as
+  # ghcr.io/<owner>/household-planner-api and -web. For another registry, change these two and the login step.
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ghcr.io/${{ github.repository_owner }}/household-planner
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write   # lets GITHUB_TOKEN push to ghcr.io; not needed for other registries
+    strategy:
+      matrix:
+        include:
+          - image: api
+            context: HouseholdPlanner.Api
+          - image: web
+            context: HouseholdPlanner.Web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Image names must be lower case, and an owner name may not be.
+      - name: Image name
+        run: echo "IMAGE=${IMAGE_PREFIX,,}-${{ matrix.image }}" >> "$GITHUB_ENV"
+
+      # For Docker Hub: drop the registry line, and use secrets.REGISTRY_USERNAME and secrets.REGISTRY_PASSWORD
+      # (an access token) as on Gitea.
+      - name: Log in to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: true
+          no-cache: true
+          tags: ${{ env.IMAGE }}:stable

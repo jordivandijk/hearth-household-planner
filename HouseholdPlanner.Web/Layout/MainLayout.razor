@@ -1,0 +1,128 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject HomeStore Store
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IStringLocalizer<Strings> T
+@inject IJSRuntime JS
+
+<MudLayout>
+    <MudMainContent Class="pt-0">
+        <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="px-0 app-content">
+            @if (!Store.Loaded && _loadError is null)
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate Size="Size.Small" />
+            }
+            @if (_loadError is not null)
+            {
+                <MudAlert Severity="Severity.Error" Class="ma-4" ContentAlignment="HorizontalAlignment.Left">
+                    @_loadError
+                    <MudButton Variant="Variant.Text" Color="Color.Inherit" Size="Size.Small" OnClick="LoadAsync">@T["Common_TryAgain"]</MudButton>
+                </MudAlert>
+            }
+            @Body
+        </MudContainer>
+    </MudMainContent>
+
+    <MudAppBar Bottom Fixed Elevation="0" Gutters="false" Class="app-nav">
+        <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="d-flex px-2">
+            <NavTab Href="/" Label="@T["Nav_Tasks"]" Badge="Store.TasksDueNow" Active="@(_path == "")" />
+            <NavTab Href="/groceries" Label="@T["Nav_Groceries"]" Badge="Store.GroceriesToBuy" Active="@(_path == "/groceries")" />
+            <NavTab Href="/household" Label="@T["Nav_Household"]" Active="@(_path is "/household" or "/admin")" />
+        </MudContainer>
+    </MudAppBar>
+</MudLayout>
+
+@code {
+    private static readonly TimeSpan RefreshEvery = TimeSpan.FromSeconds(30);
+
+    private string _path = "";
+    private string? _loadError;
+    private readonly CancellationTokenSource _stop = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UpdatePath(Nav.Uri);
+        Nav.LocationChanged += OnLocationChanged;
+        Store.Changed += OnStoreChanged;
+
+        // The layout also wraps the "authorizing" state, so it can render before the token is restored.
+        // Resolving the auth state first puts the bearer token on the HttpClient.
+        var auth = await AuthStateProvider.GetAuthenticationStateAsync();
+        if (auth.User.Identity?.IsAuthenticated != true)
+            return;
+
+        if (!Store.Loaded)
+            await LoadAsync();
+
+        _ = RefreshPeriodicallyAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            await Store.LoadAsync();
+            _loadError = null;
+            await FollowAccountLanguageAsync();
+        }
+        catch (ApiException ex)
+        {
+            _loadError = ex.Message;
+        }
+    }
+
+    /// <summary>Picks up what the others in the household changed, without real-time sync.</summary>
+    private async Task RefreshPeriodicallyAsync()
+    {
+        using var timer = new PeriodicTimer(RefreshEvery);
+        try
+        {
+            while (await timer.WaitForNextTickAsync(_stop.Token))
+            {
+                try
+                {
+                    // Also retries a first load that failed, e.g. when the phone was offline.
+                    if (Store.Loaded)
+                        await Store.RefreshAsync();
+                    else
+                        await LoadAsync();
+                }
+                catch (ApiException)
+                {
+                    // Offline for a moment; try again on the next tick.
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    /// <summary>Someone who picked a language elsewhere gets it here too, e.g. when signing in on a new phone.</summary>
+    private async Task FollowAccountLanguageAsync()
+    {
+        if (Store.Me?.Language is not { } language || !Languages.IsSupported(language) || language == Languages.Current)
+            return;
+
+        await Languages.SaveAsync(JS, language);
+        Nav.NavigateTo(Nav.Uri, forceLoad: true);
+    }
+
+    private void OnStoreChanged() => InvokeAsync(StateHasChanged);
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        UpdatePath(e.Location);
+        StateHasChanged();
+    }
+
+    private void UpdatePath(string uri) => _path = new Uri(uri).AbsolutePath.TrimEnd('/');
+
+    public void Dispose()
+    {
+        _stop.Cancel();
+        Nav.LocationChanged -= OnLocationChanged;
+        Store.Changed -= OnStoreChanged;
+    }
+}

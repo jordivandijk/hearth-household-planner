@@ -1,0 +1,10 @@
+@page "/not-found"
+@attribute [AllowAnonymous]
+@inject IStringLocalizer<Strings> T
+
+<PageTitle>@T["NotFound_PageTitle"] · Hearth</PageTitle>
+
+<EmptyState Title="@T["NotFound_Title"]" Text="@T["NotFound_Text"]" />
+<MudStack AlignItems="AlignItems.Center">
+    <MudButton Href="/" Variant="Variant.Outlined">@T["NotFound_Back"]</MudButton>
+</MudStack>

@@ -1,0 +1,17 @@
+@typeparam T
+
+@* A labelled row of chips to pick one value from, like "Repeats: Never / Daily / Weekly". *@
+<MudStack Spacing="2">
+    <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">@Label</MudText>
+    <MudChipSet T="T" SelectedValue="Value" SelectedValueChanged="ValueChanged" SelectionMode="SelectionMode.SingleSelection"
+                CheckMark="false" Variant="Variant.Text" SelectedColor="Color.Secondary">
+        @ChildContent
+    </MudChipSet>
+</MudStack>
+
+@code {
+    [Parameter, EditorRequired] public string Label { get; set; } = "";
+    [Parameter] public T? Value { get; set; }
+    [Parameter] public EventCallback<T?> ValueChanged { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

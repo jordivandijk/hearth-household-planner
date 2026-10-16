@@ -1,0 +1,15 @@
+<MudStack Spacing="1" Class="px-5 pt-6 pb-1">
+    <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">@Eyebrow</MudText>
+    <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="3">
+        <MudText Typo="Typo.h4" HtmlTag="h1">@Title</MudText>
+        @Actions
+    </MudStack>
+    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">@Summary</MudText>
+</MudStack>
+
+@code {
+    [Parameter] public string? Eyebrow { get; set; }
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter] public string? Summary { get; set; }
+    [Parameter] public RenderFragment? Actions { get; set; }
+}

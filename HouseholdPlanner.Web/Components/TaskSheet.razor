@@ -1,0 +1,127 @@
+@inherits StoreComponent
+
+<BottomSheet @bind-Open="_open" Title="@(_editing is null ? T["TaskSheet_New"] : T["TaskSheet_Edit"])"
+             Height="@(_due == DueChoice.PickDate ? "min(900px, 94dvh)" : "min(560px, 90dvh)")">
+    <MudTextField @ref="_titleField" @bind-Value="_title" Placeholder="@T["TaskSheet_Placeholder"]" Typo="Typo.h6" Underline="false"
+                  Immediate OnKeyDown="OnKeyDownAsync" />
+
+    <ChoiceChips T="Guid" Label="@T["TaskSheet_Who"]" @bind-Value="_assignee">
+        @foreach (var member in Store.Members)
+        {
+            <MudChip T="Guid" Value="member.Id" Text="@(member.Id == Store.Me?.Id ? T["TaskSheet_Me"] : member.Username)">
+                <AvatarContent><MemberAvatar Member="member" /></AvatarContent>
+            </MudChip>
+        }
+        <MudChip T="Guid" Value="Guid.Empty" Text="@T["TaskSheet_Anyone"]" />
+    </ChoiceChips>
+
+    <ChoiceChips T="DueChoice" Label="@T["TaskSheet_When"]" @bind-Value="_due">
+        @foreach (var (kind, _) in _dueChoices)
+        {
+            <MudChip T="DueChoice" Value="kind" Text="@Dates.Choice(kind)" />
+        }
+    </ChoiceChips>
+
+    @if (_due == DueChoice.PickDate)
+    {
+        <MudDatePicker PickerVariant="PickerVariant.Static" ShowToolbar="false" Date="_pickedDate" DateChanged="d => _pickedDate = d"
+                       MinDate="_firstPickable" Culture="Dates.Calendar" FirstDayOfWeek="Store.WeekStart"
+                       Color="Color.Primary" Elevation="0" Class="task-calendar mud-background-gray rounded" />
+    }
+
+    <ChoiceChips T="TaskRepeat" Label="@T["TaskSheet_Repeats"]" @bind-Value="_repeat">
+        @foreach (var repeat in Enum.GetValues<TaskRepeat>())
+        {
+            <MudChip T="TaskRepeat" Value="repeat" Text="@Dates.Repeat(repeat)" />
+        }
+    </ChoiceChips>
+
+    <SheetFooter CanDelete="_editing is not null" CanSave="!string.IsNullOrWhiteSpace(_title)"
+                 SaveLabel="@(_editing is null ? T["Common_Add"] : T["Common_Save"])" OnDelete="DeleteAsync" OnSave="SaveAsync" />
+</BottomSheet>
+
+@code {
+    private bool _open;
+    private HouseholdTask? _editing;
+    private MudTextField<string> _titleField = default!;
+    private string _title = "";
+    private Guid _assignee;
+    private DueChoice _due;
+    /// <summary>The day picked in the calendar, used when the choice is Choose date.</summary>
+    private DateTime? _pickedDate;
+    private DateTime _firstPickable;
+    private TaskRepeat _repeat;
+    private List<(DueChoice Kind, DateOnly? Date)> _dueChoices = [];
+
+    /// <summary>Opens the sheet to edit <paramref name="task"/>, or to add one when it's null.</summary>
+    public async Task ShowAsync(HouseholdTask? task = null)
+    {
+        _editing    = task;
+        _title      = task?.Title ?? "";
+        _assignee   = task is null ? Store.Me?.Id ?? Guid.Empty : task.AssigneeId ?? Guid.Empty;
+        var due     = task is null ? Today : task.Due;
+        _dueChoices = DueDates.Choices(Today);
+        _due        = DueDates.ChoiceFor(due, Today);
+        _repeat     = task?.Repeat ?? TaskRepeat.None;
+
+        // The calendar opens on the task's own date when no preset matches it, otherwise on tomorrow.
+        _pickedDate = (_due == DueChoice.PickDate && due is { } own ? own : Today.AddDays(1)).ToDateTime(TimeOnly.MinValue);
+        // Past days can't be picked, except an overdue task's own date, so editing it doesn't lose it.
+        _firstPickable = (due is { } past && past < Today ? past : Today).ToDateTime(TimeOnly.MinValue);
+        _open       = true;
+        StateHasChanged();
+
+        if (task is null)
+            await BottomSheet.FocusAfterOpenAsync(() => _open, _titleField);
+    }
+
+    private SaveTaskRequest Request() => new()
+    {
+        Title      = _title.Trim(),
+        AssigneeId = _assignee == Guid.Empty ? null : _assignee,
+        Due        = _due == DueChoice.PickDate
+            ? _pickedDate is { } picked ? DateOnly.FromDateTime(picked) : null
+            : _dueChoices.First(c => c.Kind == _due).Date,
+        Repeat     = _repeat
+    };
+
+    private async Task OnKeyDownAsync(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await SaveAsync();
+    }
+
+    private async Task SaveAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_title))
+            return;
+
+        var request = Request();
+        _open = false;
+        if (_editing is { } task)
+        {
+            await TryAsync(() => Store.UpdateTaskAsync(task.Id, request));
+        }
+        else
+        {
+            await TryAsync(async () =>
+            {
+                var added = await Store.AddTaskAsync(request);
+                ShowUndo(T["Common_Added", added.Title], () => Store.DeleteTaskAsync(added.Id));
+            });
+        }
+    }
+
+    private async Task DeleteAsync()
+    {
+        if (_editing is not { } task)
+            return;
+
+        _open = false;
+        await TryAsync(async () =>
+        {
+            await Store.DeleteTaskAsync(task.Id);
+            ShowUndo(T["Common_Deleted"], () => Store.AddTaskAsync(task.ToRequest()));
+        });
+    }
+}

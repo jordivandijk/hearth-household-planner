@@ -1,0 +1,112 @@
+@inherits StoreComponent
+
+<BottomSheet @bind-Open="_open" Height="min(500px, 90dvh)" Title="@(_editing is null ? T["GrocerySheet_New"] : T["GrocerySheet_Edit"])">
+    <MudTextField @ref="_nameField" Value="_name" ValueChanged="(string v) => OnNameChanged(v)" Placeholder="@T["GrocerySheet_Placeholder"]"
+                  Typo="Typo.h6" Underline="false" Immediate OnKeyDown="OnKeyDownAsync" />
+
+    <MudStack Spacing="2">
+        <MudText Typo="Typo.subtitle2" Class="mud-text-secondary">@T["GrocerySheet_Quantity"]</MudText>
+        <MudPaper Elevation="0" Class="d-flex align-center pa-1 mud-background-gray" Style="width: fit-content">
+            <MudIconButton Icon="@Icons.Material.Filled.Remove" Variant="Variant.Filled" Color="Color.Surface" DropShadow="false"
+                           Disabled="_quantity <= 1" OnClick="() => _quantity--" aria-label="@T["GrocerySheet_Less"]" />
+            <MudText Typo="Typo.h6" Align="Align.Center" Style="min-width: 48px">@_quantity</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Surface" DropShadow="false"
+                           Disabled="_quantity >= MaxQuantity" OnClick="() => _quantity++" aria-label="@T["GrocerySheet_More"]" />
+        </MudPaper>
+    </MudStack>
+
+    <ChoiceChips T="GroceryCategory" Label="@T["GrocerySheet_Aisle"]" Value="_category" ValueChanged="OnCategoryChanged">
+        @foreach (var category in Enum.GetValues<GroceryCategory>())
+        {
+            <MudChip T="GroceryCategory" Value="category" Text="@T[$"Aisle_{category}"]" />
+        }
+    </ChoiceChips>
+
+    <SheetFooter CanDelete="_editing is not null" CanSave="!string.IsNullOrWhiteSpace(_name)"
+                 SaveLabel="@(_editing is null ? T["Common_Add"] : T["Common_Save"])" OnDelete="DeleteAsync" OnSave="SaveAsync" />
+</BottomSheet>
+
+@code {
+    /// <summary>The API's limit.</summary>
+    private const int MaxQuantity = 999;
+
+    private bool _open;
+    private GroceryItem? _editing;
+    private MudTextField<string> _nameField = default!;
+    private string _name = "";
+    private int _quantity = 1;
+    private GroceryCategory _category = GroceryCategory.Other;
+    /// <summary>Once the user picks an aisle, typing no longer guesses it.</summary>
+    private bool _categoryPicked;
+
+    /// <summary>Opens the sheet to edit <paramref name="item"/>, or to add one when it's null.</summary>
+    public async Task ShowAsync(GroceryItem? item = null)
+    {
+        _editing        = item;
+        _name           = item?.Name ?? "";
+        _quantity       = item?.Quantity ?? 1;
+        _category       = item?.Category ?? GroceryCategory.Other;
+        _categoryPicked = item is not null;
+        _open           = true;
+        StateHasChanged();
+
+        if (item is null)
+            await BottomSheet.FocusAfterOpenAsync(() => _open, _nameField);
+    }
+
+    private void OnNameChanged(string name)
+    {
+        _name = name;
+        if (!_categoryPicked)
+            _category = GroceryText.GuessCategory(name);
+    }
+
+    private void OnCategoryChanged(GroceryCategory category)
+    {
+        _category = category;
+        _categoryPicked = true;
+    }
+
+    private async Task OnKeyDownAsync(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await SaveAsync();
+    }
+
+    private async Task SaveAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_name))
+            return;
+
+        var request = new SaveGroceryRequest
+        {
+            Name     = GroceryText.Capitalize(_name.Trim()),
+            Quantity = _quantity,
+            Category = _category,
+            InCart   = _editing?.InCart ?? false
+        };
+        _open = false;
+
+        if (_editing is { } item)
+        {
+            await TryAsync(() => Store.UpdateGroceryAsync(item.Id, request));
+        }
+        else
+        {
+            await AddGroceryAsync(request);
+        }
+    }
+
+    private async Task DeleteAsync()
+    {
+        if (_editing is not { } item)
+            return;
+
+        _open = false;
+        await TryAsync(async () =>
+        {
+            await Store.DeleteGroceryAsync(item.Id);
+            ShowUndo(T["Common_Deleted"], () => Store.AddGroceryAsync(item.ToRequest()));
+        });
+    }
+}

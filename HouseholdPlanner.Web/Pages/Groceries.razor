@@ -1,0 +1,147 @@
+@page "/groceries"
+@inherits StoreComponent
+
+<PageTitle>@T["Nav_Groceries"] · Hearth</PageTitle>
+
+<PageHeader Eyebrow="@T["Groceries_Eyebrow"]" Title="@T["Nav_Groceries"]" Summary="@(Store.Loaded ? Summary : null)">
+    <Actions>
+        <MudButton Variant="@(_shopping ? Variant.Filled : Variant.Outlined)" Color="@(_shopping ? Color.Primary : Color.Default)"
+                   DropShadow="false" Class="rounded-pill" OnClick="() => _shopping = !_shopping">
+            @(_shopping ? T["Groceries_DoneShopping"] : T["Groceries_Shop"])
+        </MudButton>
+    </Actions>
+</PageHeader>
+
+@if (_shopping)
+{
+    <div class="px-5 pt-2 pb-1">
+        <MudProgressLinear Color="Color.Primary" Value="Progress" Rounded Size="Size.Large" />
+    </div>
+}
+else
+{
+    <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="px-3 pt-3">
+        <MudTextField @bind-Value="_quick" Placeholder="@T["Groceries_QuickPlaceholder"]" Variant="Variant.Outlined" Margin="Margin.Dense"
+                      Immediate OnKeyDown="OnQuickKeyDownAsync" Class="mt-0" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" Disabled="string.IsNullOrWhiteSpace(_quick)"
+                   OnClick="QuickAddAsync">@T["Common_Add"]</MudButton>
+    </MudStack>
+
+    @if (Recents.Count > 0)
+    {
+        <div class="px-3 pt-4">
+            <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Groceries_BoughtRecently"]</MudText>
+            <div class="d-flex flex-nowrap overflow-x-auto gap-2 pt-1 pb-1">
+                @foreach (var name in Recents)
+                {
+                    <MudChip T="string" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.Add" IconColor="Color.Primary" Class="ma-0 flex-shrink-0"
+                             OnClick="() => AddGroceryAsync(new SaveGroceryRequest { Name = name, Category = GroceryText.GuessCategory(name) })">@name</MudChip>
+                }
+            </div>
+        </div>
+    }
+}
+
+@if (Store.Loaded && Store.Groceries.Count == 0)
+{
+    <EmptyState Title="@T["Groceries_Empty_Title"]" Text="@T["Groceries_Empty_Text"]" />
+}
+
+@foreach (var category in Enum.GetValues<GroceryCategory>())
+{
+    var items = ToBuy.Where(g => g.Category == category).ToList();
+    if (items.Count > 0)
+    {
+        <SectionGroup Title="@T[$"Aisle_{category}"]" Items="items">
+            <Row>
+                <GroceryRow Item="context" Large="_shopping" Checking="_checking.Contains(context.Id)" OnToggle="ToggleAsync" OnOpen="OpenAsync" />
+            </Row>
+        </SectionGroup>
+    }
+}
+
+@if (InCart.Count > 0)
+{
+    <SectionGroup Title="@T["Groceries_InCart"]" Items="InCart">
+        <Action>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" DropShadow="false" Class="rounded-pill"
+                       OnClick="ClearCartAsync">@(_shopping ? T["Groceries_FinishTrip"] : T["Groceries_Clear"])</MudButton>
+        </Action>
+        <Row>
+            <GroceryRow Item="context" Large="_shopping" OnToggle="ToggleAsync" OnOpen="OpenAsync" />
+        </Row>
+    </SectionGroup>
+}
+
+<MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Large" Class="app-fab" aria-label="@T["Groceries_AddItem"]"
+        OnClick="() => _sheet.ShowAsync()" />
+
+<GrocerySheet @ref="_sheet" />
+
+@code {
+    private GrocerySheet _sheet = default!;
+    private bool _shopping;
+    private string _quick = "";
+    /// <summary>Items ticked a moment ago, before they move to the cart.</summary>
+    private readonly HashSet<Guid> _checking = [];
+
+    private List<GroceryItem> ToBuy => Store.Groceries.Where(g => !g.InCart).ToList();
+    private List<GroceryItem> InCart => Store.Groceries.Where(g => g.InCart).ToList();
+
+    /// <summary>Recent buys that aren't on the list already.</summary>
+    private List<string> Recents => Store.Recents
+        .Where(r => !ToBuy.Any(g => g.Name.Equals(r, StringComparison.OrdinalIgnoreCase)))
+        .Take(10)
+        .ToList();
+
+    private double Progress => Store.Groceries.Count == 0 ? 0 : 100.0 * InCart.Count / Store.Groceries.Count;
+
+    private string Summary => _shopping
+        ? T["Groceries_InTheCart", InCart.Count, Store.Groceries.Count]
+        : InCart.Count > 0 ? $"{T["Groceries_ToBuy", ToBuy.Count]} · {T["Groceries_InCartCount", InCart.Count]}" : T["Groceries_ToBuy", ToBuy.Count];
+
+    private async Task QuickAddAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_quick))
+            return;
+
+        var (quantity, name) = GroceryText.ParseQuickAdd(_quick);
+        _quick = "";
+        await AddGroceryAsync(new SaveGroceryRequest { Name = name, Quantity = quantity, Category = GroceryText.GuessCategory(name) });
+    }
+
+    private async Task OnQuickKeyDownAsync(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await QuickAddAsync();
+    }
+
+    private async Task ToggleAsync(GroceryItem item)
+    {
+        var request = item.ToRequest();
+        request.InCart = !item.InCart;
+
+        if (request.InCart)
+        {
+            if (!_checking.Add(item.Id))
+                return;
+            await Task.Delay(400);
+        }
+
+        await TryAsync(() => Store.UpdateGroceryAsync(item.Id, request));
+        _checking.Remove(item.Id);
+    }
+
+    private Task OpenAsync(GroceryItem item)
+        => _checking.Contains(item.Id) ? Task.CompletedTask : _sheet.ShowAsync(item);
+
+    private async Task ClearCartAsync()
+    {
+        await TryAsync(async () =>
+        {
+            var ids = await Store.ClearCartAsync();
+            _shopping = false;
+            ShowUndo(T.Plural("Groceries_Cleared", ids.Count), () => Store.RestoreGroceriesAsync(ids));
+        });
+    }
+}

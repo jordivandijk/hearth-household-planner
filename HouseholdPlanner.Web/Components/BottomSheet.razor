@@ -1,0 +1,43 @@
+@inject IStringLocalizer<Strings> T
+
+@* The add/edit sheet that slides up from the bottom, with a title row and a Cancel button. *@
+<MudDrawer Open="Open" OpenChanged="OpenChanged" Anchor="Anchor.Bottom" Variant="DrawerVariant.Temporary" Elevation="4"
+           Height="@Height" Style="border-radius: 26px 26px 0 0">
+    <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="px-5 pt-3 pb-6">
+        <MudStack Spacing="5">
+            <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudText Typo="Typo.overline" Class="mud-text-secondary">@Title</MudText>
+                <MudButton Variant="Variant.Text" OnClick="() => OpenChanged.InvokeAsync(false)">@T["Common_Cancel"]</MudButton>
+            </MudStack>
+            @ChildContent
+        </MudStack>
+    </MudContainer>
+</MudDrawer>
+
+@code {
+    [Parameter] public bool Open { get; set; }
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    /// <summary>A real height: the closed drawer hides by moving down by it, so it can't be "auto".</summary>
+    [Parameter] public string Height { get; set; } = "min(560px, 90dvh)";
+
+    /// <summary>
+    /// Focuses <paramref name="field"/> once the sheet has slid in (earlier makes the page jump), unless
+    /// it was closed or left meanwhile.
+    /// </summary>
+    public static async Task FocusAfterOpenAsync(Func<bool> stillOpen, MudTextField<string> field)
+    {
+        await Task.Delay(330);
+        if (!stillOpen())
+            return;
+        try
+        {
+            await field.FocusAsync();
+        }
+        catch (JSException)
+        {
+            // The page was left and the field is gone.
+        }
+    }
+}

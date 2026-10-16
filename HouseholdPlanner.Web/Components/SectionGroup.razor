@@ -1,0 +1,49 @@
+@typeparam TItem
+
+@* A labelled card of rows, like "Today 3" with the tasks due today. *@
+<div class="px-3 pt-4">
+    <MudStack Row AlignItems="AlignItems.Center" Spacing="2" Class="@($"px-2 pb-2 {(Collapsible ? "cursor-pointer" : "")}")"
+              @onclick="ToggleAsync">
+        <MudText Typo="Typo.overline" Color="TitleColor" Class="@(TitleColor == Color.Default ? "mud-text-secondary" : "")">@Title</MudText>
+        @if (ShowCount)
+        {
+            <MudText Typo="Typo.overline" Class="mud-text-disabled">@(Count ?? Items.Count)</MudText>
+        }
+        @if (Collapsible)
+        {
+            <MudIcon Icon="@(Expanded ? Icons.Material.Filled.ExpandMore : Icons.Material.Filled.ChevronRight)" Size="Size.Small" Class="mud-text-disabled" />
+        }
+        <MudSpacer />
+        @Action
+    </MudStack>
+
+    @if (!Collapsible || Expanded)
+    {
+        <MudPaper Outlined Class="overflow-hidden">
+            @for (var i = 0; i < Items.Count; i++)
+            {
+                if (i > 0)
+                {
+                    <MudDivider />
+                }
+                @Row(Items[i])
+            }
+        </MudPaper>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter, EditorRequired] public IReadOnlyList<TItem> Items { get; set; } = [];
+    [Parameter, EditorRequired] public RenderFragment<TItem> Row { get; set; } = default!;
+    /// <summary>The count next to the title, when it isn't the number of rows shown.</summary>
+    [Parameter] public int? Count { get; set; }
+    [Parameter] public bool ShowCount { get; set; } = true;
+    [Parameter] public Color TitleColor { get; set; } = Color.Default;
+    [Parameter] public RenderFragment? Action { get; set; }
+    [Parameter] public bool Collapsible { get; set; }
+    [Parameter] public bool Expanded { get; set; }
+    [Parameter] public EventCallback<bool> ExpandedChanged { get; set; }
+
+    private Task ToggleAsync() => Collapsible ? ExpandedChanged.InvokeAsync(!Expanded) : Task.CompletedTask;
+}

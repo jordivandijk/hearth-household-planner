@@ -1,0 +1,21 @@
+@*
+  One of the three tabs in the bottom bar, with a count next to the label. Tabs grow from their own width rather
+  than taking a third each, and the count sits in line rather than floating beside the label, so a long label
+  like "Boodschappen" still has room for it.
+*@
+<MudButton Href="@Href" Variant="Variant.Text" Class="py-4 px-1 flex-grow-1" Color="@(Active ? Color.Primary : Color.Default)"
+           Style="@(Active ? "font-weight: 800" : "font-weight: 600")">
+    @Label
+    @if (Badge > 0)
+    {
+        <MudChip T="string" Size="Size.Small" Variant="Variant.Filled" Color="@(Active ? Color.Primary : Color.Default)"
+                 Class="ml-1 my-0" Text="@Badge.ToString()" />
+    }
+</MudButton>
+
+@code {
+    [Parameter, EditorRequired] public string Href { get; set; } = "";
+    [Parameter, EditorRequired] public string Label { get; set; } = "";
+    [Parameter] public int Badge { get; set; }
+    [Parameter] public bool Active { get; set; }
+}

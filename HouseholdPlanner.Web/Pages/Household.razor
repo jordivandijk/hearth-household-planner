@@ -1,0 +1,151 @@
+@page "/household"
+@inherits StoreComponent
+@inject IAuthService AuthService
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+
+<PageTitle>@T["Nav_Household"] · Hearth</PageTitle>
+
+<PageHeader Eyebrow="@Eyebrow" Title="@T["Nav_Household"]" Summary="@(Store.Loaded ? T.Plural("Household_DoneThisWeek", WeekTotal) : null)" />
+
+<SectionGroup Title="@T["Household_ThisWeek"]" Items="Store.Members" ShowCount="false">
+    <Row>
+        <MudStack Row AlignItems="AlignItems.Center" Spacing="3" Class="px-4 py-3">
+            <MemberAvatar Member="context" Size="Size.Medium" />
+            <MudStack Spacing="1" Class="flex-grow-1" Style="min-width: 0">
+                <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="2">
+                    <MudText Typo="Typo.body1" Class="text-truncate">@(context.Id == Store.Me?.Id ? T["Household_You", context.Username] : context.Username)</MudText>
+                    <MudText Typo="Typo.caption" Class="mud-text-secondary flex-shrink-0">@T["Household_MemberStats", context.DoneThisWeek, context.Open]</MudText>
+                </MudStack>
+                <MudProgressLinear Value="@(100.0 * context.DoneThisWeek / MaxDone)" Rounded Size="Size.Small" Color="Color.Primary"
+                                   Style="@($"--mud-palette-primary: {ThemeState.BarColor(context.Hue)}")" />
+            </MudStack>
+        </MudStack>
+    </Row>
+</SectionGroup>
+
+<div class="px-3 pt-4">
+    <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Household_Invite"]</MudText>
+    <MudPaper Outlined Class="pa-4 mt-2">
+        <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Spacing="3">
+            <MudStack Spacing="1">
+                <MudText Typo="Typo.h5" Style="letter-spacing: .08em; font-variant-numeric: tabular-nums">@Store.Household?.InviteCode</MudText>
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">@T["Household_InviteHelp"]</MudText>
+            </MudStack>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" OnClick="CopyInviteAsync">
+                @(_copied ? T["Household_Copied"] : T["Household_Copy"])
+            </MudButton>
+        </MudStack>
+    </MudPaper>
+</div>
+
+<div class="px-3 pt-4">
+    <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Household_Appearance"]</MudText>
+    <MudToggleGroup T="ThemePreference" Value="ThemeState.Preference" ValueChanged="ThemeState.SetPreferenceAsync"
+                    Color="Color.Secondary" CheckMark="false" Class="mt-2 mud-background-gray">
+        <MudToggleItem Value="ThemePreference.System" Text="@T["Theme_System"]" />
+        <MudToggleItem Value="ThemePreference.Light" Text="@T["Theme_Light"]" />
+        <MudToggleItem Value="ThemePreference.Dark" Text="@T["Theme_Dark"]" />
+    </MudToggleGroup>
+</div>
+
+<div class="px-3 pt-4">
+    <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Household_Language"]</MudText>
+    @* Each language in its own words, so it's findable whichever one the app is in now. *@
+    <MudToggleGroup T="string" Value="Languages.Current" ValueChanged="SetLanguageAsync"
+                    Color="Color.Secondary" CheckMark="false" Class="mt-2 mud-background-gray">
+        @foreach (var (code, name) in Languages.All)
+        {
+            <MudToggleItem Value="code" Text="@name" UserAttributes="@(new() { ["lang"] = code })" />
+        }
+    </MudToggleGroup>
+</div>
+
+<div class="px-3 pt-4">
+    <MudText Typo="Typo.overline" Class="mud-text-secondary px-2">@T["Household_Account"]</MudText>
+    <MudPaper Outlined Class="pa-4 mt-2">
+        <MudStack Spacing="3">
+            <MudText Typo="Typo.body2">@T["Household_SignedInAs"] <b>@Store.Me?.Username</b></MudText>
+            @if (_changingPassword)
+            {
+                <MudTextField @bind-Value="_currentPassword" Label="@T["Household_CurrentPassword"]" InputType="InputType.Password" Variant="Variant.Outlined"
+                              UserAttributes="@(new() { ["autocomplete"] = "current-password" })" />
+                <MudTextField @bind-Value="_newPassword" Label="@T["Household_NewPassword"]" InputType="InputType.Password" Variant="Variant.Outlined"
+                              HelperText="@T["Common_PasswordHelp"]" UserAttributes="@(new() { ["autocomplete"] = "new-password" })" />
+                <MudStack Row Justify="Justify.FlexEnd">
+                    <MudButton OnClick="() => _changingPassword = false">@T["Common_Cancel"]</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="ChangePasswordAsync"
+                               Disabled="_currentPassword.Length == 0 || _newPassword.Length < 6">@T["Household_ChangePassword"]</MudButton>
+                </MudStack>
+            }
+            else
+            {
+                <MudStack Row Spacing="2" Class="flex-wrap">
+                    <AuthorizeView Roles="Admin">
+                        <MudButton Variant="Variant.Outlined" Href="/admin">@T["Household_ManageMembers"]</MudButton>
+                    </AuthorizeView>
+                    <MudButton Variant="Variant.Outlined" OnClick="() => _changingPassword = true">@T["Household_ChangePassword"]</MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="SignOutAsync">@T["Household_SignOut"]</MudButton>
+                </MudStack>
+            }
+        </MudStack>
+    </MudPaper>
+</div>
+
+@code {
+    private bool _copied;
+    private bool _changingPassword;
+    private string _currentPassword = "";
+    private string _newPassword = "";
+
+    private string Eyebrow => Store.Household is { } h ? $"{h.Name} · {T.Plural("Household_People", h.Members.Count)}" : "";
+    private int WeekTotal => Store.Members.Sum(m => m.DoneThisWeek);
+    private int MaxDone => Math.Max(1, Store.Members.Select(m => m.DoneThisWeek).DefaultIfEmpty().Max());
+
+    protected override async Task OnInitializedAsync()
+    {
+        // The stats change whenever someone finishes a task.
+        await TryAsync(Store.RefreshHouseholdAsync);
+    }
+
+    private async Task CopyInviteAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", Store.Household?.InviteCode ?? "");
+        }
+        catch (JSException)
+        {
+            Snackbar.Add(T["Household_CopyFailed"], Severity.Warning);
+            return;
+        }
+        _copied = true;
+        await Task.Delay(1800);
+        _copied = false;
+    }
+
+    private async Task ChangePasswordAsync()
+    {
+        if (await TryAsync(() => AuthService.ChangePasswordAsync(_currentPassword, _newPassword)))
+        {
+            Snackbar.Add(T["Household_PasswordChanged"], Severity.Success);
+            (_changingPassword, _currentPassword, _newPassword) = (false, "", "");
+        }
+    }
+
+    /// <summary>Saves the choice on the account and this device, then reloads: Blazor only picks a language at startup.</summary>
+    private async Task SetLanguageAsync(string language)
+    {
+        if (language == Languages.Current || !await TryAsync(() => Store.SetLanguageAsync(language)))
+            return;
+
+        await Languages.SaveAsync(JS, language);
+        Nav.NavigateTo(Nav.Uri, forceLoad: true);
+    }
+
+    private async Task SignOutAsync()
+    {
+        await AuthService.LogoutAsync();
+        Nav.NavigateTo("/login");
+    }
+}

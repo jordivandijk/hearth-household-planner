@@ -1,0 +1,71 @@
+services:
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: household
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-change-me}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+
+  household-api:
+    image: git.tidewing.net/jordit/household-planner-api:${TAG:-stable}
+    build:
+      context: ./HouseholdPlanner.Api
+      dockerfile: Dockerfile
+    ports:
+      - "5160:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=household;Username=postgres;Password=${POSTGRES_PASSWORD:-change-me}"
+
+      # JWT: set JWT_KEY in the .env file (e.g. openssl rand -base64 32)
+      Jwt__Key: "${JWT_KEY}"
+      Jwt__Issuer: "HouseholdPlanner.Api"
+      Jwt__Audience: "HouseholdPlanner"
+      Jwt__ExpiryInDays: "30"
+
+      # CORS: public URL of the web app
+      CorsOrigins: "${WEB_URL:-http://localhost:5224}"
+
+      # First admin and their household, created on startup only while there is no admin yet.
+      # Everyone else joins that household with its invite code (Household tab).
+      AdminSeed__Username: "${ADMIN_SEED_USERNAME:-admin}"
+      AdminSeed__Password: "${ADMIN_SEED_PASSWORD}"
+      AdminSeed__HouseholdName: "${HOUSEHOLD_NAME:-Home}"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+
+  household-web:
+    image: git.tidewing.net/jordit/household-planner-web:${TAG:-stable}
+    build:
+      context: ./HouseholdPlanner.Web
+      dockerfile: Dockerfile
+    ports:
+      - "5224:80"
+
+    # Where the app finds the API. Empty means its own domain, under /api/.
+    environment:
+      API_URL: "${API_URL:-}"
+
+    depends_on:
+      - household-api
+    restart: unless-stopped
+
+
+volumes:
+  postgres_data:

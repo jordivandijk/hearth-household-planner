@@ -67,7 +67,7 @@ You need a machine with Docker and Docker Compose.
 **1. Get the code**
 
 ```bash
-git clone https://github.com/<you>/hearth.git
+git clone https://github.com/jordivandijk/hearth.git
 ```
 
 ```bash
